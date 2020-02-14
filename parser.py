@@ -11,23 +11,32 @@ import sys
 import csv
 from prettytable import PrettyTable
 
+#Global Dictionary for individual and families info
+individual = {}
+families = {}
+
+#parser function, need file input to run
 def parser(file):
-    individual = {}
-    families = {}
+    #Allows access to global variables
+    global individual, families
+
+    #Arrays of valid tags
     zeroLevel = ["NOTE", "HEAD", "TRLR"]
     zeroExcep = ["INDI", "FAM"]
     oneLevel = ["NAME", "SEX", "FAMC", "FAMS", "HUSB",
                     "WIFE", "CHIL"]
     oneDate = ["BIRT", "DEAT", "MARR", "DIV"]
-    dateNext = False
 
+
+    #Varibales
+    dateNext = False
     id = ""
     list = ""
     dateType = ""
+
     f = open(file, "r")
     for lines in f:
         inputs = lines.split()
-
         if(dateNext):
             dateNext = False
             if(inputs[0] == "2" and inputs[1] == "DATE"):
@@ -57,6 +66,10 @@ def parser(file):
             elif(inputs[1] in oneDate):
                 dateNext = True
                 dateType = inputs[1]
+
+#Function to display individual and families information and creates a csv file
+# with this information. 
+def display():
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 
@@ -121,6 +134,5 @@ def parser(file):
     print(y)
 
 
-def individual(file):
-    x = PrettyTable()
 parser(str(sys.argv[1]))
+display()
