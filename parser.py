@@ -165,7 +165,13 @@ def marraigeBeforeDivorce(famID):
             return True
     return True
 
-parser(str(sys.argv[1]))
+# added a default file for testing purposes
+if(len(sys.argv) >= 2):
+    gedFile = str(sys.argv[1]) 
+else:
+    gedFile = 'Tyler_McShea_FicFamilyTree.ged'  
+
+parser(gedFile)
 display()
-print(birthBeforeDeath('@I6@'))
-print(marraigeBeforeDivorce('@F3@'))
+# print(birthBeforeDeath('@I6@'))
+# print(marraigeBeforeDivorce('@F3@'))
