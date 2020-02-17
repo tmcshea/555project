@@ -10,6 +10,7 @@ Date: Feb 9, 2020
 import sys
 import csv
 from prettytable import PrettyTable
+from datetime import datetime
 
 #Global Dictionary for individual and families info
 individual = {}
@@ -133,6 +134,21 @@ def display():
     print(x)
     print(y)
 
+# function to put date in comparable format
+def parseDate(date):
+    formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
+    return formattedDate
+
+def birthBeforeDeath():
+    for ids in individual:
+        if('DEAT' in individual[ids]):
+            birth = parseDate(individual[ids]['BIRT'])
+            death = parseDate(individual[ids]['DEAT'])
+            if (birth > death):
+                print(False)
+        else:
+            print(True)
 
 parser(str(sys.argv[1]))
 display()
+birthBeforeDeath()
