@@ -69,7 +69,7 @@ def parser(file):
                 dateType = inputs[1]
 
 #Function to display individual and families information and creates a csv file
-# with this information. 
+# with this information.
 def display():
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
@@ -139,6 +139,17 @@ def parseDate(date):
     formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
     return formattedDate
 
+def age(date):
+    today = datetime.today()
+
+    if(int(today.month) - int(date[5:7]) > 0):
+        return (int(today.year) - int(date[:4]))
+    elif(int(today.month) - int(date[5:7]) == 0 and int(today.day) - int(date[8:]) >=0):
+        return (int(today.year) - int(date[:4]))
+    else:
+        return (int(today.year) - int(date[:4])) - 1
+
+
 # checks if a persons birth is before their death
 def birthBeforeDeath(id):
     if(id not in individual):
@@ -165,13 +176,37 @@ def marraigeBeforeDivorce(famID):
             return True
     return True
 
+def lessThan150(id):
+    if(id not in individual):
+        return False
+    birth = parseDate(individual[id]['BIRT'])
+    if(age(birth) >= 150):
+        return False
+    return True
+
+def marraigeBeforeBirth(id):
+    if(id not in individual):
+        return False
+    if('FAMC' not in individual[id]):
+        return True
+    birth = parseDate(individual[id]['BIRT'])
+    famID = individual[id]['FAMC']
+
+    if(famID not in families):
+        return False
+    if('MARR' in families[famID]):
+        marraige = parseDate(families[famID]['MARR'])
+        if (marraige > birth):
+            return False
+        else:
+            return True
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
-    gedFile = str(sys.argv[1]) 
+    gedFile = str(sys.argv[1])
 else:
-    gedFile = 'Tyler_McShea_FicFamilyTree.ged'  
+    gedFile = 'Tyler_McShea_FicFamilyTree.ged'
 
 parser(gedFile)
 display()
-# print(birthBeforeDeath('@I6@'))
+#print(marraigeBeforeBirth('@I1@'))
 # print(marraigeBeforeDivorce('@F3@'))
