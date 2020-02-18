@@ -1,6 +1,7 @@
 import unittest
 import parser
 
+# Checks if any dates are listed after the current date (can't be born in the future, etc...)
 class TestCase(unittest.TestCase):
 	# def setUp(self):
 	# 	return
