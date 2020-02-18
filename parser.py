@@ -10,6 +10,7 @@ Date: Feb 9, 2020
 import sys
 import csv
 from prettytable import PrettyTable
+from datetime import datetime
 
 #Global Dictionary for individual and families info
 individual = {}
@@ -133,6 +134,44 @@ def display():
     print(x)
     print(y)
 
+# function to put date in comparable format
+def parseDate(date):
+    formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
+    return formattedDate
 
-parser(str(sys.argv[1]))
+# checks if a persons birth is before their death
+def birthBeforeDeath(id):
+    if(id not in individual):
+        return False
+    if('DEAT' in individual[id]):
+        birth = parseDate(individual[id]['BIRT'])
+        death = parseDate(individual[id]['DEAT'])
+        if (birth > death):
+            return False
+        else:
+            return True
+    return True
+
+# checks if the marraige of a family is before a divorce. If no marraige or divorce, returns true
+def marraigeBeforeDivorce(famID):
+    if(famID not in families):
+        return False
+    if('DIV' in families[famID] and 'MARR' in families[famID]):
+        marraige = parseDate(families[famID]['MARR'])
+        divorce = parseDate(families[famID]['DIV'])
+        if (marraige > divorce):
+            return False
+        else:
+            return True
+    return True
+
+# added a default file for testing purposes
+if(len(sys.argv) >= 2):
+    gedFile = str(sys.argv[1]) 
+else:
+    gedFile = 'Tyler_McShea_FicFamilyTree.ged'  
+
+parser(gedFile)
 display()
+# print(birthBeforeDeath('@I6@'))
+# print(marraigeBeforeDivorce('@F3@'))
