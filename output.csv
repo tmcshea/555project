@@ -1,0 +1,22 @@
+ID,Name,Gender,Birthday,Age,Alive,Death,Child,Spouse
+@I1@,Jimmy /Finnigan/,M,7 APR 1998,22,True,NA,@F2@,@F1@
+@I2@,Greg /Finnigan/,M,16 SEP 1968,52,True,NA,@F3@,@F2@
+@I3@,Jasmine /Sullivan/,F,13 AUG 1969,51,True,NA,@F4@,@F2@
+@I4@,Richard /Sullivan/,M,27 FEB 1943,77,True,NA,NA,@F4@
+@I5@,Vicky /Dempster/,F,21 NOV 1945,75,True,NA,NA,@F5@
+@I6@,Bill /Richardson/,M,18 JUL 1970,50,False,23 OCT 1969,NA,@F5@
+@I7@,Katie /Richardson/,F,13 AUG 1964,56,True,NA,@F5@,@F6@
+@I8@,Tyler /Finnigan/,M,29 DEC 1934,86,True,NA,NA,@F3@
+@I9@,Esther /Brown/,F,13 AUG 1932,88,False,19 MAY 2019,NA,@F3@
+@I10@,Sara /Finnigan/,F,15 JUN 2004,16,True,NA,@F2@,NA
+@I11@,Hanna /McShea/,F,7 OCT 1998,22,True,NA,NA,@F1@
+@I12@,Brad /Finnigan/,M,21 JAN 2019,1,True,NA,@F1@,NA
+@I13@,Betsy /Sullivan/,F,10 SEP 2000,20,True,NA,@F6@,NA
+
+ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
+@F1@,14 JUL 2018,NA,['@I1@'],['Jimmy /Finnigan/'],['@I11@'],['Hanna /McShea/'],['@I12@']
+@F2@,18 AUG 1993,NA,['@I2@'],['Greg /Finnigan/'],['@I3@'],['Jasmine /Sullivan/'],"['@I1@', '@I10@']"
+@F3@,18 AUG 1955,NA,['@I8@'],['Tyler /Finnigan/'],['@I9@'],['Esther /Brown/'],['@I2@']
+@F4@,18 SEP 1968,NA,['@I4@'],['Richard /Sullivan/'],['@I5@'],['Vicky /Dempster/'],['@I3@']
+@F5@,20 AUG 1960,1 JUL 1960,['@I6@'],['Bill /Richardson/'],['@I5@'],['Vicky /Dempster/'],['@I7@']
+@F6@,NA,NA,NA,NA,['@I7@'],['Katie /Richardson/'],['@I13@']

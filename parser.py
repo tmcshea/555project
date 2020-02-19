@@ -71,6 +71,7 @@ def parser(file):
 #Function to display individual and families information and creates a csv file
 # with this information. 
 def display():
+	# individuals information
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 
@@ -95,6 +96,8 @@ def display():
             age = 2020 - int(individual[ids]["BIRT"][-4:])
             x.add_row([ids, individual[ids]["NAME"], individual[ids]["SEX"], individual[ids]["BIRT"], age, alive, death, child, spouse])
             writer.writerow([ids, individual[ids]["NAME"], individual[ids]["SEX"], individual[ids]["BIRT"], age, alive, death, child, spouse])
+		
+		# family/marriage information
         y = PrettyTable()
         y.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
         writer.writerow([])
@@ -139,6 +142,45 @@ def parseDate(date):
     formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
     return formattedDate
 
+# US01: checks if all dates are before the current date
+# Input: none, uses global vars created in main parser method: individual and families
+# ************** NOT TESTED YET
+def datesBeforeCurrentDate():
+	now = parseDate(datetime.now())	# today's date
+	for id in individual:	# individual dates: BIRT and DEAT
+		if 'BIRT' in individual[id]:
+			birth = parseDate(individual[id]['BIRT'])
+			if birth > now:
+				return False
+		if 'DEAT' in individual[id]:
+			death = parseDate(individual[id]['DEAT'])
+			if death > now:
+				return False
+	
+	for id in families:	# families dates: MARR and DIV
+		if 'MARR' in families[id]:
+			marriage = parseDate(families[id]['MARR'])
+			if marriage > now:
+				return False
+		if 'DIV' in families[id]:
+			divorce = parseDate(families[id]['DIV'])
+			if divorce > now:
+				return False
+	return True
+
+# US02: checks if births occur before they are married
+# Input: none, uses global vars created in main parser method: individual and families
+# ************** NOT TESTED YET
+def bornBeforeMarriage():
+	for id in individual:
+		birth = parseDate(individual[id]['BIRT'])
+		for famid in families:
+			if id == families[famid]['HUSB'] or id == families[famid]['WIFE']:
+				marriage = parseDate(families[famid]['MARR'])
+				if birth > marriage:
+					return False
+	return True
+
 # checks if a persons birth is before their death
 def birthBeforeDeath(id):
     if(id not in individual):
@@ -152,14 +194,15 @@ def birthBeforeDeath(id):
             return True
     return True
 
-# checks if the marraige of a family is before a divorce. If no marraige or divorce, returns true
-def marraigeBeforeDivorce(famID):
+# checks if the marriage of a family is before a divorce. If no marriage or divorce, returns true
+# Aaron: changed marraige to marriage because it kept bothering me, sorry
+def marriageBeforeDivorce(famID):
     if(famID not in families):
         return False
     if('DIV' in families[famID] and 'MARR' in families[famID]):
-        marraige = parseDate(families[famID]['MARR'])
+        marriage = parseDate(families[famID]['MARR'])
         divorce = parseDate(families[famID]['DIV'])
-        if (marraige > divorce):
+        if (marriage > divorce):
             return False
         else:
             return True
