@@ -176,6 +176,7 @@ def marraigeBeforeDivorce(famID):
             return True
     return True
 
+# Checks if a persons is less then 150 years old
 def lessThan150(id):
     if(id not in individual):
         return False
@@ -184,6 +185,7 @@ def lessThan150(id):
         return False
     return True
 
+# checks to see if a persons birth happens before parents marraige
 def marraigeBeforeBirth(id):
     if(id not in individual):
         return False
@@ -200,6 +202,60 @@ def marraigeBeforeBirth(id):
             return False
         else:
             return True
+    else:
+        return False
+
+# checks to see if a persons birth was after a divorce of more the 9 monthes
+def divorceAfterBirth(id):
+    if(id not in individual):
+        return False
+    if('FAMC' not in individual[id]):
+        return True
+    birth = parseDate(individual[id]['BIRT'])
+    famID = individual[id]['FAMC']
+
+    if(famID not in families):
+        return False
+
+    if('DIV' in families[famID]):
+        divorce = parseDate(families[famID]['DIV'])
+        if(birth > divorce):
+            if(birth[:4] == divorce[:4] and int(birth[5:7]) - int(divorce[5:7]) <= 9):
+                return True
+            else:
+                return False
+        else:
+            return True
+    else:
+        return True
+
+def Sprint1():
+    for id in individual:
+        if (birthBeforeDeath(id) == False):
+            print("ERROR: INDIVIDUAL: US03: " + id + ": Died " + individual[id]['DEAT'] + " before born "
+                        + individual[id]['BIRT'])
+        if (lessThan150(id) == False):
+            if ("DEAT" not in individual[id]):
+                death = "NA"
+            else:
+                death = individual[id]["DEAT"]
+            print("ERROR: INDIVIDUAL: US07: " + id + ": More than 150 years old - Birth - "
+                        + individual[id]['BIRT'] + " - Death - "
+                        + death)
+        if (marraigeBeforeBirth(id) == False):
+            famID = individual[id]['FAMC']
+            print("ANOMALY: FAMILY: US08: " + famID + ": Child " + id + " born "
+                        + individual[id]['BIRT'] + " before marriage on " + families[famID]["MARR"])
+        if (divorceAfterBirth(id) == False):
+            famID = individual[id]['FAMC']
+            print("ANOMALY: FAMILY: US08: " + famID + ": Child " + id + " born "
+                        + individual[id]['BIRT'] + " after divorce on " + families[famID]["DIV"])
+
+    for famID in families:
+        if(marraigeBeforeDivorce(famID) == False):
+            print("ERROR: FAMILY: US04: " + famID + ": Divorced " + families[famID]["DIV"] + " before married "
+                        + families[famID]["MARR"])
+
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
@@ -208,5 +264,4 @@ else:
 
 parser(gedFile)
 display()
-#print(marraigeBeforeBirth('@I1@'))
-# print(marraigeBeforeDivorce('@F3@'))
+Sprint1()
