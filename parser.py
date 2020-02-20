@@ -71,6 +71,7 @@ def parser(file):
 #Function to display individual and families information and creates a csv file
 # with this information.
 def display():
+	# individuals information
     x = PrettyTable()
     x.field_names = ["ID", "Name", "Gender", "Birthday", "Age", "Alive", "Death", "Child", "Spouse"]
 
@@ -95,6 +96,8 @@ def display():
             age = 2020 - int(individual[ids]["BIRT"][-4:])
             x.add_row([ids, individual[ids]["NAME"], individual[ids]["SEX"], individual[ids]["BIRT"], age, alive, death, child, spouse])
             writer.writerow([ids, individual[ids]["NAME"], individual[ids]["SEX"], individual[ids]["BIRT"], age, alive, death, child, spouse])
+
+		# family/marriage information
         y = PrettyTable()
         y.field_names = ["ID", "Married", "Divorced", "Husband ID", "Husband Name", "Wife ID", "Wife Name", "Children"]
         writer.writerow([])
@@ -139,6 +142,7 @@ def parseDate(date):
     formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
     return formattedDate
 
+# function that find the age of person given a date
 def age(date):
     today = datetime.today()
 
@@ -149,8 +153,57 @@ def age(date):
     else:
         return (int(today.year) - int(date[:4])) - 1
 
+# US01: checks if all dates are before the current date
+# Input: none, uses global vars created in main parser method: individual and families
+# ************** NOT TESTED YET
+def datesBeforeCurrentDate():
+	now = datetime.today()	# today's date
+	for id in individual:	# individual dates: BIRT and DEAT
+		if 'BIRT' in individual[id]:
+			birth = parseDate(individual[id]['BIRT'])
+			if birth > str(now):
+				print("ERROR: INDIVIDUAL: US01: " + id + ": Birthday " + individual[id]['BIRT']
+                            + " occurs in the future")
+		if 'DEAT' in individual[id]:
+			death = parseDate(individual[id]['DEAT'])
+			if death > str(now):
+				print("ERROR: INDIVIDUAL: US01: " + id + ": Death " + individual[id]['DEAT']
+                            + " occurs in the future")
 
-# checks if a persons birth is before their death
+	for id in families:	# families dates: MARR and DIV
+		if 'MARR' in families[id]:
+			marriage = parseDate(families[id]['MARR'])
+			if marriage > str(now):
+				print("ERROR: FAMILY: US01: " + id + ": Marriage " + families[id]['MARR']
+                            + " occurs in the future")
+		if 'DIV' in families[id]:
+			divorce = parseDate(families[id]['DIV'])
+			if divorce > str(now):
+				print("ERROR: FAMILY: US01: " + id + ": Divorce " + families[id]['DIV']
+                            + " occurs in the future")
+
+# US02: checks if births occur before they are married
+# Input: none, uses global vars created in main parser method: individual and families
+# ************** NOT TESTED YET
+def bornBeforeMarriage(famID):
+    if("MARR" in families[famID]):
+        if("HUSB" in families[famID]):
+            husband = families[famID]['HUSB'][0]
+            marriage = parseDate(families[famID]['MARR'])
+            birth = parseDate(individual[husband]['BIRT'])
+            if birth > marriage:
+                print("ERROR: FAMILY: US02: " + famID + ": Husband's birth date " + birth
+                            + " after marriage date " + marriage)
+        if("WIFE" in families[famID]):
+            wife = families[famID]['WIFE'][0]
+            marriage = parseDate(families[famID]['MARR'])
+            birth = parseDate(individual[wife]['BIRT'])
+            if birth > marriage:
+                print("ERROR: FAMILY: US02: " + famID + ": Wife's birth date " + birth
+                            + " after marriage date " + marriage)
+
+# US03: checks to see if birth occurs before death
+# Input: id tag from individual Dictionary
 def birthBeforeDeath(id):
     if(id not in individual):
         return False
@@ -163,20 +216,22 @@ def birthBeforeDeath(id):
             return True
     return True
 
-# checks if the marraige of a family is before a divorce. If no marraige or divorce, returns true
-def marraigeBeforeDivorce(famID):
+# US04: checks to see if marriage is before divorce
+# Input: famID tag from families Dictionary
+def marriageBeforeDivorce(famID):
     if(famID not in families):
         return False
     if('DIV' in families[famID] and 'MARR' in families[famID]):
-        marraige = parseDate(families[famID]['MARR'])
+        marriage = parseDate(families[famID]['MARR'])
         divorce = parseDate(families[famID]['DIV'])
-        if (marraige > divorce):
+        if (marriage > divorce):
             return False
         else:
             return True
     return True
 
-# Checks if a persons is less then 150 years old
+# US07: checks to make sure person is less thre 150 years old
+# Input: id tag from individual Dictionary
 def lessThan150(id):
     if(id not in individual):
         return False
@@ -185,8 +240,9 @@ def lessThan150(id):
         return False
     return True
 
-# checks to see if a persons birth happens before parents marraige
-def marraigeBeforeBirth(id):
+# US08: checks if marriage happens before child's birth
+# Input: id tag from individual Dictionary
+def marriageBeforeBirth(id):
     if(id not in individual):
         return False
     if('FAMC' not in individual[id]):
@@ -197,15 +253,16 @@ def marraigeBeforeBirth(id):
     if(famID not in families):
         return False
     if('MARR' in families[famID]):
-        marraige = parseDate(families[famID]['MARR'])
-        if (marraige > birth):
+        marriage = parseDate(families[famID]['MARR'])
+        if (marriage > birth):
             return False
         else:
             return True
     else:
         return False
 
-# checks to see if a persons birth was after a divorce of more the 9 monthes
+# US08: checks if divorce is after child's birth
+# Input: id tag from individual Dictionary
 def divorceAfterBirth(id):
     if(id not in individual):
         return False
@@ -230,10 +287,15 @@ def divorceAfterBirth(id):
         return True
 
 def Sprint1():
+    #US01 error check
+    datesBeforeCurrentDate()
+
     for id in individual:
+        #US03 error check
         if (birthBeforeDeath(id) == False):
             print("ERROR: INDIVIDUAL: US03: " + id + ": Died " + individual[id]['DEAT'] + " before born "
                         + individual[id]['BIRT'])
+        #US07 error check
         if (lessThan150(id) == False):
             if ("DEAT" not in individual[id]):
                 death = "NA"
@@ -242,17 +304,23 @@ def Sprint1():
             print("ERROR: INDIVIDUAL: US07: " + id + ": More than 150 years old - Birth - "
                         + individual[id]['BIRT'] + " - Death - "
                         + death)
-        if (marraigeBeforeBirth(id) == False):
+        #US08 error check
+        if (marriageBeforeBirth(id) == False):
             famID = individual[id]['FAMC']
             print("ANOMALY: FAMILY: US08: " + famID + ": Child " + id + " born "
                         + individual[id]['BIRT'] + " before marriage on " + families[famID]["MARR"])
+        #US08 error check
         if (divorceAfterBirth(id) == False):
             famID = individual[id]['FAMC']
             print("ANOMALY: FAMILY: US08: " + famID + ": Child " + id + " born "
                         + individual[id]['BIRT'] + " after divorce on " + families[famID]["DIV"])
 
+
     for famID in families:
-        if(marraigeBeforeDivorce(famID) == False):
+        #US02 error check
+        bornBeforeMarriage(famID)
+        #US04 error check
+        if(marriageBeforeDivorce(famID) == False):
             print("ERROR: FAMILY: US04: " + famID + ": Divorced " + families[famID]["DIV"] + " before married "
                         + families[famID]["MARR"])
 
