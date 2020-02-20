@@ -11,7 +11,7 @@ class Testing(unittest.TestCase):
         self.assertEqual(parser.birthBeforeDeath('@I6@'), False)
         self.assertEqual(parser.birthBeforeDeath(''), False)
         self.assertEqual(parser.birthBeforeDeath(32), False)
-    
+
     # tests for marraigeBeforeDivorce function
     def test_marraige_before_divorce(self):
         self.assertEqual(parser.marraigeBeforeDivorce('random'), False)
@@ -19,6 +19,11 @@ class Testing(unittest.TestCase):
         self.assertEqual(parser.marraigeBeforeDivorce(''), False)
         self.assertEqual(parser.marraigeBeforeDivorce('@F1@'), True)
         self.assertEqual(parser.marraigeBeforeDivorce('@F5@'), False)
-    
+
+    def test_less_150_old(self):
+        self.assertEqual(parser.lessThan150('random'), False)
+        self.assertEqual(parser.lessThan150(44), False)
+        self.assertEqual(parser.lessThan150(''), False)
+        self.assertEqual(parser.lessThan150('random'), False)
 if __name__ == "__main__":
     unittest.main()
