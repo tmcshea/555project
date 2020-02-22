@@ -17,7 +17,9 @@ class Testing(unittest.TestCase):
         self.assertEqual(parser.datesBeforeCurrentDate('@F2@'), None)
 
     def test_birth_before_marriage(self):
-        self.assertEqual(parser.bornBeforeMarriage())
+        self.assertEqual(parser.bornBeforeMarriage('random'), None)
+        self.assertEqual(parser.bornBeforeMarriage('@F2@'),
+                "ERROR: FAMILY: US02: @F2@: Husband's birth date 1950-07-17 after marriage date 1950-05-15")
 
     # tests for birthBeforeDeath function
     def test_birth_before_death(self):

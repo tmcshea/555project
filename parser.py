@@ -329,7 +329,7 @@ def Sprint1():
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
 else:
-    gedFile = 'Tyler_McShea_FicFamilyTree.ged'
+    gedFile = 'test_error_family.ged'
 
 parser(gedFile)
 display()
