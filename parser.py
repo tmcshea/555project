@@ -286,6 +286,20 @@ def divorceAfterBirth(id):
     else:
         return True
 
+def less15Siblings(famId):
+    if(famID not in families):
+        return False
+    if("CHIL" not in families[famID]):
+        return True
+
+    children = families[famID]["CHIL"]
+
+    if(len(children) >= 15):
+        return False
+    else:
+        return True
+
+
 def Sprint1():
     for id in individual:
         #US01 error check
