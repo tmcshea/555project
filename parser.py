@@ -156,9 +156,9 @@ def age(date):
 # US01: checks if all dates are before the current date
 # Input: none, uses global vars created in main parser method: individual and families
 # ************** NOT TESTED YET
-def datesBeforeCurrentDate():
+def datesBeforeCurrentDate(id):
 	now = datetime.today()	# today's date
-	for id in individual:	# individual dates: BIRT and DEAT
+	if id in individual:	# individual dates: BIRT and DEAT
 		if 'BIRT' in individual[id]:
 			birth = parseDate(individual[id]['BIRT'])
 			if birth > str(now):
@@ -170,7 +170,7 @@ def datesBeforeCurrentDate():
 				print("ERROR: INDIVIDUAL: US01: " + id + ": Death " + individual[id]['DEAT']
                             + " occurs in the future")
 
-	for id in families:	# families dates: MARR and DIV
+	if id in families:	# families dates: MARR and DIV
 		if 'MARR' in families[id]:
 			marriage = parseDate(families[id]['MARR'])
 			if marriage > str(now):
@@ -186,7 +186,7 @@ def datesBeforeCurrentDate():
 # Input: none, uses global vars created in main parser method: individual and families
 # ************** NOT TESTED YET
 def bornBeforeMarriage(famID):
-    if("MARR" in families[famID]):
+    if(famID in families and "MARR" in families[famID]):
         if("HUSB" in families[famID]):
             husband = families[famID]['HUSB'][0]
             marriage = parseDate(families[famID]['MARR'])
@@ -287,10 +287,9 @@ def divorceAfterBirth(id):
         return True
 
 def Sprint1():
-    #US01 error check
-    datesBeforeCurrentDate()
-
     for id in individual:
+        #US01 error check
+        datesBeforeCurrentDate(id)
         #US03 error check
         if (birthBeforeDeath(id) == False):
             print("ERROR: INDIVIDUAL: US03: " + id + ": Died " + individual[id]['DEAT'] + " before born "
@@ -317,6 +316,8 @@ def Sprint1():
 
 
     for famID in families:
+        #US01 error check
+        datesBeforeCurrentDate(famID)
         #US02 error check
         bornBeforeMarriage(famID)
         #US04 error check
@@ -332,4 +333,5 @@ else:
 
 parser(gedFile)
 display()
+print(datesBeforeCurrentDate('') is None)
 Sprint1()
