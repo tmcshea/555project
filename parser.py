@@ -286,6 +286,46 @@ def divorceAfterBirth(id):
     else:
         return True
 
+# US09: checks if individuals are born BEFORE parents' deaths
+# Input: id tag from individual dictionary
+# O: [wife death makes sense, husb "]
+# ************** NOT TESTED YET
+def bornBeforeParentDeath(id):
+	if (id not in individual):
+		return False
+	
+	result = [False, False]
+    birth = parseDate(individual[id]['BIRT'])
+	famID = individual[id]['FAMC']
+
+	if (famID not in families):
+		return False
+
+	wifeID = families[famID]['WIFE'][0]
+	husbID = families[famID]['HUSB'][0]
+
+	if ('DEAT' in individual[wifeID]):
+		# wife dead rip
+		deathDate = individual[wifeID]['DEAT']
+		if (birth > deathDate):
+			continue
+		else:
+			result[0] = True
+
+	if ('DEAT' in individual[husbID]):
+		# husband dead rip
+		deathDate = individual[husbID]['DEAT']
+		if (birth > deathDate):
+			if (birth[:4] == deathDate[:4] and 
+				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
+				result[1] = True
+			else:
+				continue
+		else:
+			result[1] = True
+
+	return result
+	
 def Sprint1():
     for id in individual:
         #US01 error check
