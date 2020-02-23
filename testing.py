@@ -5,38 +5,64 @@ class Testing(unittest.TestCase):
 
     # tests for datesBeforeCurrentDate function
     def test_date_before_current(self):
-        self.assertEqual(parser.datesBeforeCurrentDate('random'), None)
-        self.assertEqual(parser.datesBeforeCurrentDate('@I3@'),
-                            "ERROR: INDIVIDUAL: US01: @I3@: Death 12 APR 2050 occurs in the future")
-        self.assertEqual(parser.datesBeforeCurrentDate('@I6@'),
-                            "ERROR: INDIVIDUAL: US01: @I6@: Birthday 13 SEP 2030 occurs in the future")
-        self.assertEqual(parser.datesBeforeCurrentDate(''), None)
-        self.assertEqual(parser.datesBeforeCurrentDate('@I2@'), None)
-        self.assertEqual(parser.datesBeforeCurrentDate('@F3@'),
-                            "ERROR: FAMILY: US01: @F3@: Marriage 18 SEP 2020 occurs in the future")
-        self.assertEqual(parser.datesBeforeCurrentDate('@F2@'), None)
+        self.assertEqual(parser.datesBeforeCurrentDate('random'), [True, True])
+        self.assertEqual(parser.datesBeforeCurrentDate('@I3@'), [True, False])
+        self.assertEqual(parser.datesBeforeCurrentDate('@I6@'), [False, True])
+        self.assertEqual(parser.datesBeforeCurrentDate(''), [True, True])
+        self.assertEqual(parser.datesBeforeCurrentDate('@I2@'), [True, True])
+        self.assertEqual(parser.datesBeforeCurrentDate('@F3@'), [False, True])
+        self.assertEqual(parser.datesBeforeCurrentDate('@F2@'), [True, True])
 
     def test_birth_before_marriage(self):
-        self.assertEqual(parser.bornBeforeMarriage('random'), None)
-        self.assertEqual(parser.bornBeforeMarriage('@F2@'),
-                "ERROR: FAMILY: US02: @F2@: Husband's birth date 1950-07-17 after marriage date 1950-05-15")
+        self.assertEqual(parser.bornBeforeMarriage('random'), [])
+        self.assertEqual(parser.bornBeforeMarriage('@F2@'), [False, True])
+        self.assertEqual(parser.bornBeforeMarriage('@F3@'), [False, True])
+        self.assertEqual(parser.bornBeforeMarriage(''), [])
+        self.assertEqual(parser.bornBeforeMarriage('@F1@'), [True, True])
+        self.assertEqual(parser.bornBeforeMarriage('@I2@'), [])
 
     # tests for birthBeforeDeath function
     def test_birth_before_death(self):
         self.assertEqual(parser.birthBeforeDeath('random'), False)
-        self.assertEqual(parser.birthBeforeDeath('@I7@'), True)
-        self.assertEqual(parser.birthBeforeDeath('@I9@'), True)
-        self.assertEqual(parser.birthBeforeDeath('@I6@'), False)
+        self.assertEqual(parser.birthBeforeDeath('@I1@'), True)
+        self.assertEqual(parser.birthBeforeDeath('@I4@'), False)
+        self.assertEqual(parser.birthBeforeDeath('@I2@'), False)
         self.assertEqual(parser.birthBeforeDeath(''), False)
         self.assertEqual(parser.birthBeforeDeath(32), False)
 
-    # tests for marraigeBeforeDivorce function
-    def test_marraige_before_divorce(self):
-        self.assertEqual(parser.marraigeBeforeDivorce('random'), False)
-        self.assertEqual(parser.marraigeBeforeDivorce(32), False)
-        self.assertEqual(parser.marraigeBeforeDivorce(''), False)
-        self.assertEqual(parser.marraigeBeforeDivorce('@F1@'), True)
-        self.assertEqual(parser.marraigeBeforeDivorce('@F5@'), False)
+    # tests for marriageBeforeDivorce function
+    def test_marriage_before_divorce(self):
+        self.assertEqual(parser.marriageBeforeDivorce('random'), False)
+        self.assertEqual(parser.marriageBeforeDivorce(32), False)
+        self.assertEqual(parser.marriageBeforeDivorce(''), False)
+        self.assertEqual(parser.marriageBeforeDivorce('@F2@'), True)
+        self.assertEqual(parser.marriageBeforeDivorce('@F3@'), False)
+
+    def test_less_than_150_years(self):
+        self.assertEqual(parser.lessThan150('random'), False)
+        self.assertEqual(parser.lessThan150(32), False)
+        self.assertEqual(parser.lessThan150(''), False)
+        self.assertEqual(parser.lessThan150('@I2@'), True)
+        self.assertEqual(parser.lessThan150('@I3@'), True)
+        self.assertEqual(parser.lessThan150('@I1@'), False)
+        self.assertEqual(parser.lessThan150('@I7@'), False)
+
+    def test_birth_before_marriage_divroce(self):
+        self.assertEqual(parser.marriageBeforeBirth('random'), False)
+        self.assertEqual(parser.marriageBeforeBirth(''), False)
+        self.assertEqual(parser.marriageBeforeBirth('@I5@'), True)
+        self.assertEqual(parser.marriageBeforeBirth('@I1@'), False)
+        self.assertEqual(parser.marriageBeforeBirth('@I7@'), True)
+        self.assertEqual(parser.marriageBeforeBirth('@F2@'), False)
+
+
+        self.assertEqual(parser.divorceAfterBirth('random'), False)
+        self.assertEqual(parser.divorceAfterBirth(''), False)
+        self.assertEqual(parser.divorceAfterBirth('@I3@'), False)
+        self.assertEqual(parser.divorceAfterBirth('@I5@'), True)
+        self.assertEqual(parser.divorceAfterBirth('@I1@'), True)
+        self.assertEqual(parser.divorceAfterBirth('@I7@'), True)
+        self.assertEqual(parser.divorceAfterBirth('@F3@'), False)
 
 
 if __name__ == "__main__":
