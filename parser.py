@@ -230,6 +230,34 @@ def marriageBeforeDivorce(famID):
             return True
     return True
 
+# US05: Checks to see if marriage occured before death of either spouse
+# Input: famID tag from families Dictionary
+def marriageBeforeDeath(famID):
+    if(famID not in families):
+        return False
+    if('MARR' in families[families] and 'DEAT' in families[famID]):
+        marriage = parseDate(families[famID]['MARR'])
+        death = parseDate(families[famID]['DEAT'])
+        if(marriage > death):
+            return False
+        else:
+            return True
+    return True
+
+# US06: Checks to see if divorce occured before death of either spouse
+# Input: famID tag from families Dictionary
+def divorceBeforeDeath(famID):
+    if(famID not in families):
+        return False
+    if('DIV' in families[families] and 'DEAT' in families[famID]):
+        divorce = parseDate(families[famID]['DIV'])
+        death = parseDate(families[famID]['DEAT'])
+        if(divorce > death):
+            return False
+        else:
+            return True
+    return True
+
 # US07: checks to make sure person is less thre 150 years old
 # Input: id tag from individual Dictionary
 def lessThan150(id):

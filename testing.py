@@ -32,12 +32,23 @@ class Testing(unittest.TestCase):
 
     # tests for marraigeBeforeDivorce function
     def test_marraige_before_divorce(self):
-        self.assertEqual(parser.marraigeBeforeDivorce('random'), False)
-        self.assertEqual(parser.marraigeBeforeDivorce(32), False)
-        self.assertEqual(parser.marraigeBeforeDivorce(''), False)
-        self.assertEqual(parser.marraigeBeforeDivorce('@F1@'), True)
-        self.assertEqual(parser.marraigeBeforeDivorce('@F5@'), False)
+        self.assertEqual(parser.marriageBeforeDivorce('random'), False)
+        self.assertEqual(parser.marriageBeforeDivorce(32), False)
+        self.assertEqual(parser.marriageBeforeDivorce(''), False)
+        self.assertEqual(parser.marriageBeforeDivorce('@F1@'), True)
+        self.assertEqual(parser.marriageBeforeDivorce('@F5@'), False)
 
+    # tests for marraigeBeforeDeath function
+    def test_marraige_before_death(self):
+        self.assertEqual(parser.marriageBeforeDeath('random'), False)
+        self.assertEqual(parser.marriageBeforeDeath(5), False)
+        self.assertEqual(parser.marriageBeforeDeath(''), False)
+
+    # tests for divorceBeforeDeath function
+    def test_divorce_before_death(self):
+        self.assertEqual(parser.divorceBeforeDeath('random'), False)
+        self.assertEqual(parser.divorceBeforeDeath(5), False)
+        self.assertEqual(parser.divorceBeforeDeath(''), False)
 
 if __name__ == "__main__":
     unittest.main()
