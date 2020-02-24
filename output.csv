@@ -4,7 +4,7 @@ ID,Name,Gender,Birthday,Age,Alive,Death,Child,Spouse
 @I3@,Camron /Sullivan/,F,14 SEP 1980,40,False,12 APR 2050,@F3@,@F1@
 @I4@,Henry /Victor/,M,17 JUL 1950,70,False,17 JUL 1949,NA,@F2@
 @I5@,Betsy /Anderson/,F,15 MAY 1950,70,True,NA,NA,@F2@
-@I6@,Tyler /Sullivan/,M,13 SEP 2030,-10,True,NA,NA,@F3@
+@I6@,Tyler /Sullivan/,M,13 SEP 2030,-10,False,17 JUL 1930,NA,@F3@
 @I7@,Patty /McShea/,F,17 JUL 1700,320,True,NA,NA,@F3@
 
 ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
@@ -13,16 +13,22 @@ ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
 @F3@,18 SEP 2020,17 JUL 1940,['@I6@'],['Tyler /Sullivan/'],['@I7@'],['Patty /McShea/'],['@I3@']
 
 ERROR: INDIVIDUAL: US07: @I1@: More than 150 years old - Birth - 14 JUL 1800 - Death - NA
-ANOMALY: FAMILY: US08: @F1@: Child z born 14 JUL 1800 before marriage on 14 OCT 1998
+ANOMALY: FAMILY: US08: @F1@: Child @I1@ born 14 JUL 1800 before marriage on 14 OCT 1998
 ERROR: INDIVIDUAL: US03: @I2@: Died 17 JUL 1949 before born 15 JUL 1981
 ERROR: INDIVIDUAL: US01: @I3@: Death 12 APR 2050 occurs in the future
 ANOMALY: FAMILY: US08: @F3@: Child @I3@ born 14 SEP 1980 before marriage on 18 SEP 2020
 ANOMALY: FAMILY: US08: @F3@: Child @I3@ born 14 SEP 1980 after divorce on 17 JUL 1940
 ERROR: INDIVIDUAL: US03: @I4@: Died 17 JUL 1949 before born 17 JUL 1950
 ERROR: INDIVIDUAL: US01: @I6@: Birthday 13 SEP 2030 occurs in the future
+ERROR: INDIVIDUAL: US03: @I6@: Died 17 JUL 1930 before born 13 SEP 2030
 ERROR: INDIVIDUAL: US07: @I7@: More than 150 years old - Birth - 17 JUL 1700 - Death - NA
 ERROR: FAMILY: US04: @F1@: Divorced 17 AUG 1995 before married 14 OCT 1998
+ERROR: FAMILY: US05: @F1@: Married 1998-10-14 after husband's (@I2@) death on 1949-07-17
+ERROR: FAMILY: US06: @F1@: Divorced 1995-08-17 after husbands (@I2@) death on 1949-07-17
 ERROR: FAMILY: US02: @F2@: Husband's birth date 1950-07-17 after marriage date 1950-05-15
+ERROR: FAMILY: US05: @F2@: Married 1950-05-15 after husband's (@I4@) death on 1949-07-17
 ERROR: FAMILY: US01: @F3@: Marriage 18 SEP 2020 occurs in the future
 ERROR: FAMILY: US02: @F3@: Husband's birth date 2030-09-13 after marriage date 2020-09-18
 ERROR: FAMILY: US04: @F3@: Divorced 17 JUL 1940 before married 18 SEP 2020
+ERROR: FAMILY: US05: @F3@: Married 2020-09-18 after husband's (@I6@) death on 1930-07-17
+ERROR: FAMILY: US06: @F3@: Divorced 1940-07-17 after husbands (@I6@) death on 1930-07-17

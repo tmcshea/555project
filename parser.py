@@ -180,6 +180,7 @@ def datesBeforeCurrentDate(id):
             if divorce > str(now):
                 results[1] = False
     return results
+
 # US02: checks if births occur before they are married
 # Input: none, uses global vars created in main parser method: individual and families
 # ************** NOT TESTED YET
@@ -200,6 +201,7 @@ def bornBeforeMarriage(famID):
             if birth > marriage:
                 results[1] = False
     return results
+
 # US03: checks to see if birth occurs before death
 # Input: id tag from individual Dictionary
 def birthBeforeDeath(id):
@@ -227,6 +229,44 @@ def marriageBeforeDivorce(famID):
         else:
             return True
     return True
+
+# US05: Checks to see if marriage occured before death of either spouse
+# Input: famID tag from families Dictionary
+def marriageBeforeDeath(famID):
+    results = []
+    if(famID in families and 'MARR' in families[famID]):
+        results = [True, True]
+        marriage = parseDate(families[famID]['MARR'])
+        husbID = families[famID]['HUSB'][0]
+        wifeID = families[famID]['WIFE'][0]
+        if ("DEAT" in individual[husbID]):
+            deathHusb = parseDate(individual[husbID]['DEAT'])
+            if(marriage > deathHusb):
+                results[0] = False
+        if ("DEAT" in individual[wifeID]):
+            deathWife = parseDate(individual[wifeID]['DEAT'])
+            if(marriage > deathWife):
+                results[1] = False
+    return results
+
+# US06: Checks to see if divorce occured before death of either spouse
+# Input: famID tag from families Dictionary
+def divorceBeforeDeath(famID):
+    results = [None, None]
+    if(famID in families and 'DIV' in families[famID]):
+        results = [True, True]
+        divorce = parseDate(families[famID]['DIV'])
+        husbID = families[famID]['HUSB'][0]
+        wifeID = families[famID]['WIFE'][0]
+        if ("DEAT" in individual[husbID]):
+            deathHusb = parseDate(individual[husbID]['DEAT'])
+            if(divorce > deathHusb):
+                results[0] = False
+        if ("DEAT" in individual[wifeID]):
+            deathWife = parseDate(individual[wifeID]['DEAT'])
+            if(divorce > deathWife):
+                results[1] = False
+    return results
 
 # US07: checks to make sure person is less thre 150 years old
 # Input: id tag from individual Dictionary
@@ -363,7 +403,6 @@ def Sprint1():
 
 
     for famID in families:
-
         #US01 error check
         if(datesBeforeCurrentDate(famID)[0] == False):
             print("ERROR: FAMILY: US01: " + famID + ": Marriage " + families[famID]['MARR']
@@ -397,11 +436,50 @@ def Sprint1():
                         + " after marriage date " + marriage)
             csv_file.write("\n")
         #US04 error check
-        if(marriageBeforeDivorce(famID) == False):
+        if (marriageBeforeDivorce(famID) == False):
             print("ERROR: FAMILY: US04: " + famID + ": Divorced " + families[famID]["DIV"] + " before married "
                         + families[famID]["MARR"])
             csv_file.write("ERROR: FAMILY: US04: " + famID + ": Divorced " + families[famID]["DIV"] + " before married "
                         + families[famID]["MARR"])
+            csv_file.write("\n")
+        #US05 error check
+        if (marriageBeforeDeath(famID)[0] == False):
+            husband = families[famID]['HUSB'][0]
+            marriage = parseDate(families[famID]['MARR'])
+            death = parseDate(individual[husband]['DEAT'])
+            print("ERROR: FAMILY: US05: " + famID + ": Married " + marriage
+                        + " after husbands (" + husband +") death on " + death)
+            csv_file.write("ERROR: FAMILY: US05: " + famID + ": Married " + marriage
+                        + " after husband's (" + husband +") death on " + death)
+            csv_file.write("\n")
+        if (marriageBeforeDeath(famID)[1] == False):
+            wife = families[famID]['WIFE'][0]
+            marriage = parseDate(families[famID]['MARR'])
+            death = parseDate(individual[wife]['DEAT'])
+            print("ERROR: FAMILY: US05: " + famID + ": Married " + marriage
+                        + " after wife's (" + wife +") death on " + death)
+            csv_file.write("ERROR: FAMILY: US05: " + famID + ": Married " + marriage
+                        + " after wife's (" + wife +") death on " + death)
+            csv_file.write("\n")
+
+        #US06 error check
+        if (divorceBeforeDeath(famID)[0] == False):
+            husband = families[famID]['HUSB'][0]
+            divorce = parseDate(families[famID]['DIV'])
+            death = parseDate(individual[husband]['DEAT'])
+            print("ERROR: FAMILY: US06: " + famID + ": Divorced " + divorce
+                        + " after husbands (" + husband +") death on " + death)
+            csv_file.write("ERROR: FAMILY: US06: " + famID + ": Divorced " + divorce
+                        + " after husbands (" + husband +") death on " + death)
+            csv_file.write("\n")
+        if (divorceBeforeDeath(famID)[1] == False):
+            wife = families[famID]['WIFE'][0]
+            divorce = parseDate(families[famID]['DIV'])
+            death = parseDate(individual[wife]['DEAT'])
+            print("ERROR: FAMILY: US06: " + famID + ": Divorced " + divorce
+                        + " after wife's (" + wife +") death on " + death)
+            csv_file.write("ERROR: FAMILY: US06: " + famID + ": Divorced " + divorce
+                        + " after wife's (" + wife +") death on " + death)
             csv_file.write("\n")
 
 # added a default file for testing purposes

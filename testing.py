@@ -64,6 +64,17 @@ class Testing(unittest.TestCase):
         self.assertEqual(parser.divorceAfterBirth('@I7@'), True)
         self.assertEqual(parser.divorceAfterBirth('@F3@'), False)
 
+    # tests for marraigeBeforeDeath function
+    def test_marraige_before_death(self):
+        self.assertEqual(parser.marriageBeforeDeath('random'), [])
+        self.assertEqual(parser.marriageBeforeDeath(5), [])
+        self.assertEqual(parser.marriageBeforeDeath(''), [])
+
+    # tests for divorceBeforeDeath function
+    def test_divorce_before_death(self):
+        self.assertEqual(parser.divorceBeforeDeath('random'), [None, None])
+        self.assertEqual(parser.divorceBeforeDeath(5), [None, None])
+        self.assertEqual(parser.divorceBeforeDeath(''), [None, None])
 
 if __name__ == "__main__":
     unittest.main()
