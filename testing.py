@@ -90,5 +90,6 @@ class Testing(unittest.TestCase):
         self.assertEqual(familyTreeParser.maleLastName('@I2@'), True)
         self.assertEqual(familyTreeParser.maleLastName('@I3@'), False)
         self.assertEqual(familyTreeParser.maleLastName('@I1@'), True)
+        
 if __name__ == "__main__":
     unittest.main()
