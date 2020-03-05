@@ -18,7 +18,9 @@ families = {}
 csv_file = open('output.csv', mode='w')
 familyLastName = {}
 lastNameBool = {}
-#parser function, need file input to run
+
+# parser function
+# in: gedcom file
 def parser(file):
 	#Allows access to global variables
 	global individual, families
@@ -70,8 +72,7 @@ def parser(file):
 				dateNext = True
 				dateType = inputs[1]
 
-#Function to display individual and families information and creates a csv file
-# with this information.
+# display indiv and families, also creates a csv file
 def display():
 	# individuals informatio
 
@@ -140,12 +141,14 @@ def display():
 	print(x)
 	print(y)
 
-# function to put date in comparable format
+# date formatter function
 def parseDate(date):
 	formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
 	return formattedDate
 
-# function that find the age of person given a date
+# function that finds a person's age
+# input: date
+# **** TODO: is the date supposed to be formatted with parseDate()?
 def age(date):
 	today = datetime.today()
 
@@ -156,8 +159,16 @@ def age(date):
 	else:
 		return (int(today.year) - int(date[:4])) - 1
 
+# function that finds a person's age
+# input: individual id
+def age_id(id):
+	date = parseDate(individual[id]['BIRT'])
+	return age(date)
+
 # US01: checks if all dates are before the current date
-# Input: none, uses global vars created in main parser method: individual and families
+# Input: any ID
+# Output: indv:	[birth, death]
+# 		  fam:	[marriage, divorce]
 # ************** NOT TESTED YET
 def datesBeforeCurrentDate(id):
 	now = datetime.today()	# today's date
@@ -183,8 +194,8 @@ def datesBeforeCurrentDate(id):
 	return results
 
 # US02: checks if births occur before they are married
-# Input: none, uses global vars created in main parser method: individual and families
-# ************** NOT TESTED YET
+# Input: family ID
+# Output: [husband, wife]
 def bornBeforeMarriage(famID):
 	results = []
 	if(famID in families and "MARR" in families[famID]):
@@ -327,7 +338,7 @@ def divorceAfterBirth(id):
 
 # US09: checks if individuals are born BEFORE parents' deaths
 # Input: id tag from individual dictionary
-# O: [wife death makes sense, husb "]
+# Output: [wife death makes sense, husb "]
 # ************** NOT TESTED YET
 def bornBeforeParentDeath(id):
 	if (id not in individual):
@@ -347,7 +358,7 @@ def bornBeforeParentDeath(id):
 		# wife dead rip
 		deathDate = individual[wifeID]['DEAT']
 		if (birth > deathDate):
-			continue
+			pass
 		else:
 			result[0] = True
 
@@ -359,11 +370,40 @@ def bornBeforeParentDeath(id):
 				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
 				result[1] = True
 			else:
-				continue
+				pass
 		else:
 			result[1] = True
 
 	return result
+	# took 20 minutes
+
+# US10: marriage after 14
+# Input: id tag from family dictionary
+# Output: False if famID invalid / array - [ wife not 14?, husb not 14? ]
+# ************** NOT TESTED YET
+def marriageAfter14(famID):
+	# base case: is famID valid?
+	if (famID not in families):
+		return False
+	result = [True, True] # result array
+
+	# husb and wife indiv ids
+	family = families[famID]
+	husbandID = family['HUSB']
+	wifeID = family['WIFE']
+
+	# check if husb and wife exist?         ///// wouldn't this have been tested already?
+	# if husbandID not in individual:
+	# 	return False
+
+	# check each spouse using age_id(id)
+	if age_id(husbandID) < 14:
+		result[0] = False
+	if age_id(wifeID) < 14:
+		result[1] = False
+
+	return result
+	# took 10 minutes
 
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
@@ -588,6 +628,11 @@ def Sprint2():
 			csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
 						" has different last name then father " + father + ", " + fatherName)
 			csv_file.write("\n")
+
+def Sprint2Test():
+	print(individual)
+	print(families)
+
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
 	gedFile = str(sys.argv[1])
@@ -595,6 +640,7 @@ else:
 	gedFile = 'test_error_family.ged'
 
 parser(gedFile)
-display()
-Sprint1()
-Sprint2()
+# display()
+# Sprint1()
+# Sprint2()
+Sprint2Test()
