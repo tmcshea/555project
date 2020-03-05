@@ -7,6 +7,7 @@ Takes file input name through argv in the terminal
 Author: Tyler McShea, Aaron Jin, Connor Murphy, Nicholas Polich
 Date: Feb 9, 2020
 """
+
 import sys
 import csv
 from prettytable import PrettyTable
@@ -60,7 +61,13 @@ def parser(file):
         elif(inputs[0] == "1"):
             if(inputs[1] in oneLevel):
                 if(list == "individual"):
-                    individual[id][inputs[1]] = ' '.join(inputs[2:])
+                    if(inputs[1] == 'FAMS'):
+                        if inputs[1] in individual[id]:
+                            individual[id][inputs[1]].append(' '.join(inputs[2:]))
+                        else:
+                            individual[id][inputs[1]] =  [' '.join(inputs[2:])]
+                    else:
+                        individual[id][inputs[1]] = ' '.join(inputs[2:])
                 elif(list == "families"):
                     if inputs[1] in families[id]:
                         families[id][inputs[1]].append(' '.join(inputs[2:]))
@@ -330,40 +337,36 @@ def divorceAfterBirth(id):
 # O: [wife death makes sense, husb "]
 # ************** NOT TESTED YET
 def bornBeforeParentDeath(id):
-	if (id not in individual):
-		return False
+    if (id not in individual):
+        return False
 
-	result = [False, False]
+    result = [False, False]
     birth = parseDate(individual[id]['BIRT'])
-	famID = individual[id]['FAMC']
+    famID = individual[id]['FAMC']
 
-	if (famID not in families):
-		return False
+    if (famID not in families):
+        return False
 
-	wifeID = families[famID]['WIFE'][0]
-	husbID = families[famID]['HUSB'][0]
+    wifeID = families[famID]['WIFE'][0]
+    husbID = families[famID]['HUSB'][0]
 
-	if ('DEAT' in individual[wifeID]):
-		# wife dead rip
-		deathDate = individual[wifeID]['DEAT']
-		if (birth > deathDate):
-			continue
-		else:
-			result[0] = True
+    if ('DEAT' in individual[wifeID]):
+        # wife dead rip
+        deathDate = individual[wifeID]['DEAT']
+        if (birth < deathDate):
+            result[0] = True
 
-	if ('DEAT' in individual[husbID]):
-		# husband dead rip
-		deathDate = individual[husbID]['DEAT']
-		if (birth > deathDate):
-			if (birth[:4] == deathDate[:4] and
-				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
-				result[1] = True
-			else:
-				continue
-		else:
-			result[1] = True
+    if ('DEAT' in individual[husbID]):
+        # husband dead rip
+        deathDate = individual[husbID]['DEAT']
+        if (birth > deathDate):
+            if (birth[:4] == deathDate[:4] and
+                int(birth[5:7] - int(deathDate[5:7]) <= 9)):
+                result[1] = True
+        else:
+            result[1] = True
 
-	return result
+    return result
 
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
@@ -598,3 +601,6 @@ parser(gedFile)
 display()
 Sprint1()
 Sprint2()
+print(individual)
+print("\n")
+print(families)
