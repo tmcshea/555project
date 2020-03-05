@@ -16,7 +16,8 @@ from datetime import datetime
 individual = {}
 families = {}
 csv_file = open('output.csv', mode='w')
-noneLastName = []
+familyLastName = {}
+lastNameBool = {}
 #parser function, need file input to run
 def parser(file):
     #Allows access to global variables
@@ -326,7 +327,7 @@ def divorceAfterBirth(id):
 
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
-def less15Siblings(famId):
+def less15Siblings(famID):
     if(famID not in families):
         return False
     if("CHIL" not in families[famID]):
@@ -339,14 +340,58 @@ def less15Siblings(famId):
     else:
         return True
 
+# Helper function that parser the last name of the individual
+# Input: id tag from individual Dictionary
+def parserLastName(id):
+    if (id not in individual or 'NAME' not in individual[id]):
+        return ""
+    else:
+        name = individual[id]['NAME'].split()
+        return name[1][1:-1]
+
 # US016: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
-# def maleLastName(id):
-#     if(id not in individual):
-#         return False
-#     if('FAMS' not in individual[id]):
-#         return True
+def maleLastNameHelper(id):
+    if(id not in individual):
+        return False
+    if('FAMS' in individual[id]):
+        famSpouse = individual[id]['FAMS']
+    else:
+        famSpouse = None
+    if('FAMC' in individual[id]):
+        famChild = individual[id]['FAMC']
+    else:
+        famChild = None
+    if(famChild == None):
+        if (famSpouse == None):
+            return True
+        else:
+            familyLastName[famSpouse] = parserLastName(id)
+            return True
+    if(famChild in familyLastName):
+        if(familyLastName[famChild] == parserLastName(id)):
+            familyLastName[famSpouse] = familyLastName[famChild]
+            return True
+        else:
+            familyLastName[famSpouse] = parserLastName(id)
+            return False
+    else:
+        return False
 
+# US016: checks to see that a family has less then 15 siblings
+# Input: famID tag from families Dictionary
+def maleLastName(id):
+    if (id not in individual or individual[id]['SEX'] != 'M'):
+        return False
+    if ('FAMS' not in individual[id]):
+        lastNameBool[id] = maleLastNameHelper(id)
+    else:
+        lastNameBool[id] = maleLastNameHelper(id)
+        children = families[individual[id]['FAMS']]['CHIL']
+        for chil in children:
+            if (individual[chil]['SEX'] == 'M'):
+                maleLastName(chil)
+    return True
 def Sprint1():
     for id in individual:
 
@@ -482,6 +527,26 @@ def Sprint1():
                         + " after wife's (" + wife +") death on " + death)
             csv_file.write("\n")
 
+def Sprint2():
+    for id in individual:
+        if (individual[id]['SEX'] == 'M' and 'FAMC' not in individual[id]):
+            maleLastName(id)
+
+    for famID in families:
+        if (less15Siblings(famID) == False):
+            print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+            csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+            csv_file.write("\n")
+
+    for id in lastNameBool:
+        if(lastNameBool[id] == False):
+            father = families[individual[id]['FAMC']]['HUSB'][0]
+            fatherName = individual[father]['NAME']
+            print("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+                         " has different last name then father " + father + ", " + fatherName)
+            csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+                         " has different last name then father " + father + ", " + fatherName)
+            csv_file.write("\n")
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
@@ -491,3 +556,4 @@ else:
 parser(gedFile)
 display()
 Sprint1()
+Sprint2()
