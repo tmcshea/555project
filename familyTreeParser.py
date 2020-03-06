@@ -368,7 +368,7 @@ def bornBeforeParentDeath(id):
 
     return result
 
-# checks the families a person is part of
+# Returns the families a person is part of
 # Input: id from individual Dictionary
 # Output: false if id is not found, empty list if no families, list of families otherwise
 def parseFamilies(id):
@@ -419,6 +419,26 @@ def noBigamy(id):
         allDatesList.append(thisFamilylength)
     valid = noBigamyHelper(allDatesList)
     return valid    
+
+# US012: checks to make sure parents are correct ages in relation to their kids. 
+# Input: famID tag from families Dictionary
+def parentsNotTooOld(famID):
+    if(famID not in families):
+        return False
+    if("CHIL" not in families[famID]):
+        return True
+    children = families[famID]["CHIL"]
+    wifeBirth = individual[families[famID]['WIFE'][0]]['BIRT']
+    wifeAge = age(parseDate(wifeBirth))
+    husbBirth = individual[families[famID]['HUSB'][0]]['BIRT']
+    husbAge = age(parseDate(husbBirth))
+    for kid in children:
+        kidBirth = individual[kid]['BIRT']
+        kidAge = age(parseDate(kidBirth))
+        if ((wifeAge - kidAge >=60) or (husbAge - kidAge >= 80)):
+            return False
+    return True
+    
 
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
@@ -657,10 +677,11 @@ else:
     gedFile = 'Tyler_McShea_FicFamilyTree.ged'
 
 parser(gedFile)
-#display()
+display()
 #Sprint1()
 Sprint2()
 # print(individual)
 # print("\n")
 # print(families)
 #print(noBigamy('@I5@'))
+print(parentsNotTooOld('@F2@'))
