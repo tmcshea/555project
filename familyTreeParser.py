@@ -378,17 +378,47 @@ def parseFamilies(id):
         return []
     return individual[id]['FAMS']
 
+# helper function for noBigamy
+# Input: list of family dates in form [startDate, endDate]
+def noBigamyHelper(famList):
+    for fam in famList:
+        for otherFam in famList:
+            if (fam == otherFam):
+                continue
+            if ((fam[0] < otherFam[1]) and (fam[1] > otherFam[0])):
+                return False
+            if ((fam[1] > otherFam[0]) and (fam[0] < otherFam[1])):
+                return False
+    return True
+
 # US011: checks to make sure a person is not in two families at once
 # Input: id from individuals Dictionary
+# NOTE: will also return false if marraige occurs after death
 def noBigamy(id):
+    MAXDATE = parseDate('31 DEC 9999')
     if (id not in individual):
         return False
     famList = parseFamilies(id)
     if (len(famList)==1):
         return True
     # if it gets to this point, the person is in multiple families. Need to check they don't overlap
+    allDatesList=[]
     for family in famList:
-        print(families[family])
+        startDate = parseDate(families[family]['MARR'])
+        endDate = MAXDATE
+        if ('DIV' in families[family]):
+            endDate = parseDate(families[family]['DIV'])
+        else:
+            if ('DEAT' in individual[families[family]['WIFE'][0]]):
+                wifeDeath = individual[families[family]['WIFE'][0]]['DEAT']
+                endDate = min(endDate, wifeDeath)
+            if ('DEAT' in individual[families[family]['HUSB'][0]]):
+                husbDeath  = individual[families[family]['HUSB'][0]]['DEAT']
+                endDate = min(endDate, husbDeath)
+        thisFamilylength = [startDate, endDate]
+        allDatesList.append(thisFamilylength)
+    valid = noBigamyHelper(allDatesList)
+    return valid    
 
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
@@ -420,7 +450,9 @@ def maleLastNameHelper(id):
     if(id not in individual):
         return False
     if('FAMS' in individual[id]):
-        famSpouse = individual[id]['FAMS']
+        # CM - edited this because the change to FAMS being a list broke it. 
+        # If there are multiple families for an individual this could be incorrect
+        famSpouse = individual[id]['FAMS'][0]
     else:
         famSpouse = None
     if('FAMC' in individual[id]):
@@ -452,7 +484,8 @@ def maleLastName(id):
         lastNameBool[id] = maleLastNameHelper(id)
     else:
         lastNameBool[id] = maleLastNameHelper(id)
-        children = families[individual[id]['FAMS']]['CHIL']
+        # CM - added [0] for list. Look at comment in maleLastNameHelper for more info 
+        children = families[individual[id]['FAMS'][0]]['CHIL']
         for chil in children:
             if (individual[chil]['SEX'] == 'M'):
                 maleLastName(chil)
@@ -613,6 +646,10 @@ def Sprint2():
             csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
                          " has different last name then father " + father + ", " + fatherName)
             csv_file.write("\n")
+    
+    for id in individual:
+        if (noBigamy(id) == False):
+            print('ERROR: INDIVIDUAL: US11: {} is married to multiple people at the same time'.format(id))
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
@@ -620,10 +657,10 @@ else:
     gedFile = 'Tyler_McShea_FicFamilyTree.ged'
 
 parser(gedFile)
-display()
+#display()
 #Sprint1()
-#Sprint2()
-print(individual)
-print("\n")
-print(families)
-print(noBigamy('@I5@'))
+Sprint2()
+# print(individual)
+# print("\n")
+# print(families)
+#print(noBigamy('@I5@'))
