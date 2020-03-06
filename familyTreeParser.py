@@ -368,6 +368,28 @@ def bornBeforeParentDeath(id):
 
     return result
 
+# checks the families a person is part of
+# Input: id from individual Dictionary
+# Output: false if id is not found, empty list if no families, list of families otherwise
+def parseFamilies(id):
+    if (id not in individual):
+        return False
+    if ('FAMS' not in individual[id]):
+        return []
+    return individual[id]['FAMS']
+
+# US011: checks to make sure a person is not in two families at once
+# Input: id from individuals Dictionary
+def noBigamy(id):
+    if (id not in individual):
+        return False
+    famList = parseFamilies(id)
+    if (len(famList)==1):
+        return True
+    # if it gets to this point, the person is in multiple families. Need to check they don't overlap
+    for family in famList:
+        print(families[family])
+
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def less15Siblings(famID):
@@ -595,12 +617,13 @@ def Sprint2():
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
 else:
-    gedFile = 'test_error_family.ged'
+    gedFile = 'Tyler_McShea_FicFamilyTree.ged'
 
 parser(gedFile)
 display()
-Sprint1()
-Sprint2()
+#Sprint1()
+#Sprint2()
 print(individual)
 print("\n")
 print(families)
+print(noBigamy('@I5@'))
