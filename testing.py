@@ -77,6 +77,20 @@ class Testing(unittest.TestCase):
         self.assertEqual(familyTreeParser.divorceAfterBirth('@I7@'), True)
         self.assertEqual(familyTreeParser.divorceAfterBirth('@F3@'), False)
 
+    def test_no_bigamy(self):
+        self.assertEqual(familyTreeParser.noBigamy('random'), False)
+        self.assertEqual(familyTreeParser.noBigamy(''), False)
+        self.assertEqual(familyTreeParser.noBigamy('@I7@'), True)
+        self.assertEqual(familyTreeParser.noBigamy('@I2@'), False)
+        self.assertEqual(familyTreeParser.noBigamy('@I5@'), True)
+    
+    def test_no_parents_too_old(self):
+        self.assertEqual(familyTreeParser.parentsNotTooOld('random'), False)
+        self.assertEqual(familyTreeParser.parentsNotTooOld(''), False)
+        self.assertEqual(familyTreeParser.parentsNotTooOld('@F1@'), True)
+        self.assertEqual(familyTreeParser.parentsNotTooOld('@F33@'), False)
+        self.assertEqual(familyTreeParser.parentsNotTooOld('@F3'), False)
+        
     def test_less_than_15_siblings(self):
         self.assertEqual(familyTreeParser.less15Siblings('random'), False)
         self.assertEqual(familyTreeParser.less15Siblings(''), False)
