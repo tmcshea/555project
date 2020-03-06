@@ -428,6 +428,8 @@ def parentsNotTooOld(famID):
     if("CHIL" not in families[famID]):
         return True
     children = families[famID]["CHIL"]
+    if ('HUSB' not in families[famID] or 'WIFE' not in families[famID]):
+        return False
     wifeBirth = individual[families[famID]['WIFE'][0]]['BIRT']
     wifeAge = age(parseDate(wifeBirth))
     husbBirth = individual[families[famID]['HUSB'][0]]['BIRT']
@@ -439,7 +441,6 @@ def parentsNotTooOld(famID):
             return False
     return True
     
-
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def less15Siblings(famID):
@@ -669,12 +670,21 @@ def Sprint2():
     
     for id in individual:
         if (noBigamy(id) == False):
-            print('ERROR: INDIVIDUAL: US11: {} is married to multiple people at the same time'.format(id))
+            print('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
+            csv_file.write('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
+            csv_file.write("\n")
+
+    for famID in families:
+        if (parentsNotTooOld(famID) == False):
+            print('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
+            csv_file.write('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
+            csv_file.write("\n")
+
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
     gedFile = str(sys.argv[1])
 else:
-    gedFile = 'Tyler_McShea_FicFamilyTree.ged'
+    gedFile = 'test_bigamy_and_parents_age.ged'
 
 parser(gedFile)
 display()
@@ -684,4 +694,3 @@ Sprint2()
 # print("\n")
 # print(families)
 #print(noBigamy('@I5@'))
-print(parentsNotTooOld('@F2@'))
