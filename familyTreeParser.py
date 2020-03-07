@@ -146,12 +146,10 @@ def parseDate(date):
 	formattedDate = (str(datetime.strptime(date, '%d %b %Y')).split(' ')[0])
 	return formattedDate
 
-# function that finds a person's age
-# input: date
-# **** TODO: is the date supposed to be formatted with parseDate()?
+# function that finds a person's age (does not stop at death)
+# input: date passed through parseDate
 def age(date):
 	today = datetime.today()
-
 	if(int(today.month) - int(date[5:7]) > 0):
 		return (int(today.year) - int(date[:4]))
 	elif(int(today.month) - int(date[5:7]) == 0 and int(today.day) - int(date[8:]) >=0):
@@ -159,17 +157,24 @@ def age(date):
 	else:
 		return (int(today.year) - int(date[:4])) - 1
 
-# function that finds a person's age
-# input: individual id
-def age_id(id):
-	date = parseDate(individual[id]['BIRT'])
-	return age(date)
+# helper function for US10: marriage after 14
+# input: individual id, family id
+def age_during_marriage(birth, marr):
+	if(int(marr[5:7]) - int(birth[5:7]) > 0):
+		return (int(marr[:4]) - int(birth[:4]))
+	elif(int(marr[5:7]) - int(birth[5:7]) == 0 and int(marr[8:]) - int(birth[8:]) >=0):
+		return (int(marr[:4]) - int(birth[:4]))
+	else:
+		return (int(marr[:4]) - int(birth[:4])) - 1
+
+# ----------------------------
+# SPRINT 1
+# ----------------------------
 
 # US01: checks if all dates are before the current date
 # Input: any ID
 # Output: indv:	[birth, death]
 # 		  fam:	[marriage, divorce]
-# ************** NOT TESTED YET
 def datesBeforeCurrentDate(id):
 	now = datetime.today()	# today's date
 	results = [True, True]
@@ -311,7 +316,7 @@ def marriageBeforeBirth(id):
 	else:
 		return False
 
-# US08: checks if divorce is after child's birth
+# US08.5: checks if divorce is after child's birth
 # Input: id tag from individual Dictionary
 def divorceAfterBirth(id):
 	if(id not in individual):
@@ -336,20 +341,28 @@ def divorceAfterBirth(id):
 	else:
 		return True
 
+# ----------------------------
+# SPRINT 2
+# ----------------------------
+
 # US09: checks if individuals are born BEFORE parents' deaths
 # Input: id tag from individual dictionary
 # Output: [wife death makes sense, husb "]
 # ************** NOT TESTED YET
 def bornBeforeParentDeath(id):
 	if (id not in individual):
-		return False
+		return 'INDVIDERROR'
 
-	result = [False, False]
+	result = [True, True]
 	birth = parseDate(individual[id]['BIRT'])
-	famID = individual[id]['FAMC']
+
+	if 'FAMC' not in individual[id]:
+		return 'NOTACHILD'
+	else:
+		famID = individual[id]['FAMC']
 
 	if (famID not in families):
-		return False
+		return 'FAMIDERROR'
 
 	wifeID = families[famID]['WIFE'][0]
 	husbID = families[famID]['HUSB'][0]
@@ -360,7 +373,7 @@ def bornBeforeParentDeath(id):
 		if (birth > deathDate):
 			pass
 		else:
-			result[0] = True
+			result[0] = False
 
 	if ('DEAT' in individual[husbID]):
 		# husband dead rip
@@ -368,18 +381,19 @@ def bornBeforeParentDeath(id):
 		if (birth > deathDate):
 			if (birth[:4] == deathDate[:4] and
 				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
-				result[1] = True
+				result[1] = False
 			else:
 				pass
 		else:
-			result[1] = True
+			result[1] = False
 
 	return result
 	# took 20 minutes
 
 # US10: marriage after 14
 # Input: id tag from family dictionary
-# Output: False if famID invalid / array - [ wife not 14?, husb not 14? ]
+# Output: False if famID invalid
+#		[ wife<14?, husb<14? ]
 # ************** NOT TESTED YET
 def marriageAfter14(famID):
 	# base case: is famID valid?
@@ -389,23 +403,24 @@ def marriageAfter14(famID):
 
 	# husb and wife indiv ids
 	family = families[famID]
-	husbandID = family['HUSB']
-	wifeID = family['WIFE']
+	husbandID = family['HUSB'][0]
+	wifeID = family['WIFE'][0]
 
 	# check if husb and wife exist?         ///// wouldn't this have been tested already?
-	# if husbandID not in individual:
-	# 	return False
 
-	# check each spouse using age_id(id)
-	if age_id(husbandID) < 14:
+	# check each spouse using age(id)
+	husbBirth = parseDate(individual[husbandID]['BIRT'])
+	wifeBirth = parseDate(individual[wifeID]['BIRT'])
+	marr = parseDate(family['MARR'])
+	if age_during_marriage(husbBirth, marr) < 14:
 		result[0] = False
-	if age_id(wifeID) < 14:
+	if age_during_marriage(wifeBirth, marr) < 14:
 		result[1] = False
 
 	return result
 	# took 10 minutes
 
-# US015: checks to see that a family has less then 15 siblings
+# US15: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def less15Siblings(famID):
 	if(famID not in families):
@@ -429,7 +444,7 @@ def parserLastName(id):
 		name = individual[id]['NAME'].split()
 		return name[1][1:-1]
 
-# US016: checks to see that a family has less then 15 siblings
+# US16: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def maleLastNameHelper(id):
 	if(id not in individual):
@@ -458,7 +473,7 @@ def maleLastNameHelper(id):
 	else:
 		return False
 
-# US016: checks to see that a family has less then 15 siblings
+# US16: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def maleLastName(id):
 	if (id not in individual or individual[id]['SEX'] != 'M'):
@@ -475,7 +490,6 @@ def maleLastName(id):
 
 def Sprint1():
 	for id in individual:
-
 		#US01 error check
 		if (datesBeforeCurrentDate(id)[0] == False):
 			print("ERROR: INDIVIDUAL: US01: " + id + ": Birthday " + individual[id]['BIRT']
@@ -489,7 +503,6 @@ def Sprint1():
 			csv_file.write("ERROR: INDIVIDUAL: US01: " + id + ": Death " + individual[id]['DEAT']
 						+ " occurs in the future")
 			csv_file.write("\n")
-
 		#US03 error check
 		if (birthBeforeDeath(id) == False):
 			print("ERROR: INDIVIDUAL: US03: " + id + ": Died " + individual[id]['DEAT'] + " before born "
@@ -526,7 +539,6 @@ def Sprint1():
 			csv_file.write("ANOMALY: FAMILY: US08: " + famID + ": Child " + id + " born "
 						+ individual[id]['BIRT'] + " after divorce on " + families[famID]["DIV"])
 			csv_file.write("\n")
-
 
 	for famID in families:
 		#US01 error check
@@ -587,7 +599,6 @@ def Sprint1():
 			csv_file.write("ERROR: FAMILY: US05: " + famID + ": Married " + marriage
 						+ " after wife's (" + wife +") death on " + death)
 			csv_file.write("\n")
-
 		#US06 error check
 		if (divorceBeforeDeath(famID)[0] == False):
 			husband = families[famID]['HUSB'][0]
@@ -610,16 +621,42 @@ def Sprint1():
 
 def Sprint2():
 	for id in individual:
+		# US09 - bornBeforeParentDeath : [wife death, husb death]
+		if (bornBeforeParentDeath(id) == 'INDVIDERROR'):
+			print("ERROR: US09: INDIVIDUAL: " + id +
+				": ID is giving an error")
+		if (bornBeforeParentDeath(id) == 'FAMIDERROR'):
+			print("ERROR: US09: INDIVIDUAL: " + id +
+				": ID is giving an error")
+		if (bornBeforeParentDeath(id) == 'NOTACHILD'):
+			pass
+		if (bornBeforeParentDeath(id)[0] == False):
+			print("ERROR: US09: INDIVIDUAL: " + id +
+				": Mother died before birth of " + individual[id]['NAME'] )
+		if (not bornBeforeParentDeath(id)[1]):
+			print("ERROR: US09: INDIVIDUAL: " + id +
+				": Father died 6 months before birth of " + individual[id]['NAME'] )
+		# US16 - maleLastName
 		if (individual[id]['SEX'] == 'M' and 'FAMC' not in individual[id]):
 			maleLastName(id)
 
 	for famID in families:
+		# US10 - marriageAfter14 : [ wife, husb ]
+		if (not marriageAfter14(famID)[0]):
+			print("ERROR: US10: FAMILY: " + famID +
+				": Mother married before 14" )
+		if (not marriageAfter14(famID)[1]):
+			print("ERROR: US10: FAMILY: " + famID +
+				": Father married before 14" )
+
+		# US15 - less15Siblings
 		if (less15Siblings(famID) == False):
 			print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
 			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
 			csv_file.write("\n")
 
 	for id in lastNameBool:
+		# US16 - maleLastName
 		if(lastNameBool[id] == False):
 			father = families[individual[id]['FAMC']]['HUSB'][0]
 			fatherName = individual[father]['NAME']
@@ -629,10 +666,6 @@ def Sprint2():
 						" has different last name then father " + father + ", " + fatherName)
 			csv_file.write("\n")
 
-def Sprint2Test():
-	print(individual)
-	print(families)
-
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
 	gedFile = str(sys.argv[1])
@@ -640,7 +673,8 @@ else:
 	gedFile = 'test_error_family.ged'
 
 parser(gedFile)
-# display()
+display()
+print(families)
 # Sprint1()
-# Sprint2()
-Sprint2Test()
+Sprint2()
+# age_during_marriage('@I2@', '@F1@')
