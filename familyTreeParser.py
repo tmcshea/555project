@@ -11,7 +11,7 @@ Date: Feb 9, 2020
 import sys
 import csv
 from prettytable import PrettyTable
-from datetime import datetime
+from datetime import datetime, date
 
 #Global Dictionary for individual and families info
 individual = {}
@@ -368,6 +368,57 @@ def bornBeforeParentDeath(id):
 
     return result
 
+# US013: Birth dates of siblings must be more than 8 months apart or
+# fewer than 2 days apart
+# Input: famID tag from families Dictionary
+def siblingSpacing(famID):
+    if(famID not in families):
+        return False
+    if("CHIL" not in families[famID]):
+        return True
+    children = families[famID]["CHIL"]
+    if(len(children) < 2):
+        return True
+    else:
+        birthday_siblings = []
+        for child in children:
+            birthday_siblings.append(parseDate(individual[child]['BIRT']))
+        splitdates = []
+        for dates in birthday_siblings:
+            newdate = dates.split('-')
+            year = int(newdate[0])
+            month = int(newdate[1])
+            day = int(newdate[2])
+            dateformatted = date(year, month, day)
+            splitdates.append(dateformatted)
+        for d1 in splitdates:
+            for d2 in splitdates:
+                if((d1.year - d2.year) * 12 + d1.month - d2.month) < 8 or ((d1.year == d2.year) and (d1.month == d2.month) and ((d1.day - d2.day) >= 2)):
+                    return False
+    return True
+
+
+# US014: No more than 5 sibilings should be born at the same time
+# Input: famID tag from families Dictionary
+def siblingSameBirth(famID):
+    if(famID not in families):
+        return False
+    if("CHIL" not in families[famID]):
+        return True
+    children = families[famID]["CHIL"]
+    if(len(children) <= 5):
+        return True
+    else:
+        birthday_siblings = {}
+        for child in children:
+            if(parseDate(individual[child]['BIRT']) in birthday_siblings):
+                birthday_siblings[parseDate(individual[child]['BIRT'])] += 1
+            else:
+                birthday_siblings[parseDate(individual[child]['BIRT'])] = 1
+        for i in birthday_siblings:
+            if (birthday_siblings[i] >= 5):
+                return False
+        print(birthday_siblings)
 # US015: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
 def less15Siblings(famID):
@@ -398,7 +449,7 @@ def maleLastNameHelper(id):
     if(id not in individual):
         return False
     if('FAMS' in individual[id]):
-        famSpouse = individual[id]['FAMS']
+        famSpouse = individual[id]['FAMS'][0]
     else:
         famSpouse = None
     if('FAMC' in individual[id]):
@@ -430,7 +481,7 @@ def maleLastName(id):
         lastNameBool[id] = maleLastNameHelper(id)
     else:
         lastNameBool[id] = maleLastNameHelper(id)
-        children = families[individual[id]['FAMS']]['CHIL']
+        children = families[individual[id]['FAMS'][0]]['CHIL']
         for chil in children:
             if (individual[chil]['SEX'] == 'M'):
                 maleLastName(chil)
@@ -577,11 +628,19 @@ def Sprint2():
             maleLastName(id)
 
     for famID in families:
+        if (siblingSpacing(famID) == False):
+            print("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+            csv_file.write("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+            csv_file.write("\n")
+        if (siblingSameBirth(famID) == False):
+            print("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
+            csv_file.write("ERROR: FAMILY: US15: " + famID + ": More than 5 siblings have the same birth")
+            csv_file.write("\n")
         if (less15Siblings(famID) == False):
             print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
             csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
             csv_file.write("\n")
-
+    
     for id in lastNameBool:
         if(lastNameBool[id] == False):
             father = families[individual[id]['FAMC']]['HUSB'][0]
