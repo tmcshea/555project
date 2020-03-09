@@ -555,7 +555,7 @@ def siblingSameBirth(famID):
 		for i in birthday_siblings:
 			if (birthday_siblings[i] >= 5):
 				return False
-		print(birthday_siblings)
+		return True
 # US015: checks to see that a family has less then 15 siblings
 	if (id not in individual):
 		return 'INDVIDERROR'
