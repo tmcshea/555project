@@ -396,15 +396,19 @@ def divorceAfterBirth(id):
 
 
 def bornBeforeParentDeath(id):
-	if (id not in individual):
-		return False
+		if (id not in individual):
+		return 'INDVIDERROR'
 
-	result = [False, False]
+	result = [True, True]
 	birth = parseDate(individual[id]['BIRT'])
-	famID = individual[id]['FAMC']
+
+	if 'FAMC' not in individual[id]:
+		return 'NOTACHILD'
+	else:
+		famID = individual[id]['FAMC']
 
 	if (famID not in families):
-		return False
+		return 'FAMIDERROR'
 
 	wifeID = families[famID]['WIFE'][0]
 	husbID = families[famID]['HUSB'][0]
@@ -412,8 +416,10 @@ def bornBeforeParentDeath(id):
 	if ('DEAT' in individual[wifeID]):
 		# wife dead rip
 		deathDate = individual[wifeID]['DEAT']
-		if (birth < deathDate):
-			result[0] = True
+		if (birth > deathDate):
+			pass
+		else:
+			result[0] = False
 
 	if ('DEAT' in individual[husbID]):
 		# husband dead rip
@@ -421,15 +427,50 @@ def bornBeforeParentDeath(id):
 		if (birth > deathDate):
 			if (birth[:4] == deathDate[:4] and
 				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
-				result[1] = True
+				result[1] = False
+			else:
+				pass
 		else:
-			result[1] = True
+			result[1] = False
 
 	return result
+	# took 20 minutes
+
+# US10: marriage after 14
+# Input: id tag from family dictionary
+# Output: False if famID invalid
+#		[ wife<14?, husb<14? ]
+# ************** NOT TESTED YET
+def marriageAfter14(famID):
+	# base case: is famID valid?
+	if (famID not in families):
+		return False
+	result = [True, True] # result array
+
+	# husb and wife indiv ids
+	family = families[famID]
+	husbandID = family['HUSB'][0]
+	wifeID = family['WIFE'][0]
+
+	# check if husb and wife exist?         ///// wouldn't this have been tested already?
+
+	# check each spouse using age(id)
+	husbBirth = parseDate(individual[husbandID]['BIRT'])
+	wifeBirth = parseDate(individual[wifeID]['BIRT'])
+	marr = parseDate(family['MARR'])
+	if age_during_marriage(husbBirth, marr) < 14:
+		result[0] = False
+	if age_during_marriage(wifeBirth, marr) < 14:
+		result[1] = False
+
+	return result
+	# took 10 minutes
+
 
 # Returns the families a person is part of
 # Input: id from individual Dictionary
 # Output: false if id is not found, empty list if no families, list of families otherwise
+
 
 
 def parseFamilies(id):
@@ -557,75 +598,7 @@ def siblingSameBirth(famID):
 				return False
 		return True
 # US015: checks to see that a family has less then 15 siblings
-	if (id not in individual):
-		return 'INDVIDERROR'
 
-	result = [True, True]
-	birth = parseDate(individual[id]['BIRT'])
-
-	if 'FAMC' not in individual[id]:
-		return 'NOTACHILD'
-	else:
-		famID = individual[id]['FAMC']
-
-	if (famID not in families):
-		return 'FAMIDERROR'
-
-	wifeID = families[famID]['WIFE'][0]
-	husbID = families[famID]['HUSB'][0]
-
-	if ('DEAT' in individual[wifeID]):
-		# wife dead rip
-		deathDate = individual[wifeID]['DEAT']
-		if (birth > deathDate):
-			pass
-		else:
-			result[0] = False
-
-	if ('DEAT' in individual[husbID]):
-		# husband dead rip
-		deathDate = individual[husbID]['DEAT']
-		if (birth > deathDate):
-			if (birth[:4] == deathDate[:4] and
-				int(birth[5:7] - int(deathDate[5:7]) <= 9)):
-				result[1] = False
-			else:
-				pass
-		else:
-			result[1] = False
-
-	return result
-	# took 20 minutes
-
-# US10: marriage after 14
-# Input: id tag from family dictionary
-# Output: False if famID invalid
-#		[ wife<14?, husb<14? ]
-# ************** NOT TESTED YET
-def marriageAfter14(famID):
-	# base case: is famID valid?
-	if (famID not in families):
-		return False
-	result = [True, True] # result array
-
-	# husb and wife indiv ids
-	family = families[famID]
-	husbandID = family['HUSB'][0]
-	wifeID = family['WIFE'][0]
-
-	# check if husb and wife exist?         ///// wouldn't this have been tested already?
-
-	# check each spouse using age(id)
-	husbBirth = parseDate(individual[husbandID]['BIRT'])
-	wifeBirth = parseDate(individual[wifeID]['BIRT'])
-	marr = parseDate(family['MARR'])
-	if age_during_marriage(husbBirth, marr) < 14:
-		result[0] = False
-	if age_during_marriage(wifeBirth, marr) < 14:
-		result[1] = False
-
-	return result
-	# took 10 minutes
 
 # US15: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
