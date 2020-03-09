@@ -91,6 +91,20 @@ class Testing(unittest.TestCase):
         self.assertEqual(familyTreeParser.parentsNotTooOld('@F33@'), False)
         self.assertEqual(familyTreeParser.parentsNotTooOld('@F3'), False)
         
+    def test_sibling_spacing(self):
+        self.assertEqual(familyTreeParser.siblingSpacing('random'), False)
+        self.assertEqual(familyTreeParser.siblingSpacing(''), False)
+        self.assertEqual(familyTreeParser.siblingSpacing('@I3@'), False)
+        self.assertEqual(familyTreeParser.siblingSpacing('@F2@'), True)
+        self.assertEqual(familyTreeParser.siblingSpacing('@F1@'), True)
+
+    def test_sibling_same_birth(self):
+        self.assertEqual(familyTreeParser.siblingSameBirth('random'), False)
+        self.assertEqual(familyTreeParser.siblingSameBirth(''), False)
+        self.assertEqual(familyTreeParser.siblingSameBirth('@I3@'), False)
+        self.assertEqual(familyTreeParser.siblingSameBirth('@F2@'), True)
+        self.assertEqual(familyTreeParser.siblingSameBirth('@F1@'), True)
+
     def test_less_than_15_siblings(self):
         self.assertEqual(familyTreeParser.less15Siblings('random'), False)
         self.assertEqual(familyTreeParser.less15Siblings(''), False)
