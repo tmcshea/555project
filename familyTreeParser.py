@@ -396,9 +396,9 @@ def divorceAfterBirth(id):
 
 
 def bornBeforeParentDeath(id):
-		if (id not in individual):
-		return 'INDVIDERROR'
-
+	if (id not in individual):
+	    return 'INDVIDERROR'
+        
 	result = [True, True]
 	birth = parseDate(individual[id]['BIRT'])
 
