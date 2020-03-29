@@ -97,21 +97,21 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.bornBeforeParentDeath(''), False)
 		self.assertEqual(familyTreeParser.bornBeforeParentDeath('@F1'), [True, True])
 		self.assertEqual(familyTreeParser.bornBeforeParentDeath('@F2'), [False, False])
-		
+
 	def test_no_bigamy(self):
 		self.assertEqual(familyTreeParser.noBigamy('random'), False)
 		self.assertEqual(familyTreeParser.noBigamy(''), False)
 		self.assertEqual(familyTreeParser.noBigamy('@I7@'), True)
 		self.assertEqual(familyTreeParser.noBigamy('@I2@'), False)
 		self.assertEqual(familyTreeParser.noBigamy('@I5@'), True)
-	
+
 	def test_no_parents_too_old(self):
 		self.assertEqual(familyTreeParser.parentsNotTooOld('random'), False)
 		self.assertEqual(familyTreeParser.parentsNotTooOld(''), False)
 		self.assertEqual(familyTreeParser.parentsNotTooOld('@F1@'), True)
 		self.assertEqual(familyTreeParser.parentsNotTooOld('@F33@'), False)
 		self.assertEqual(familyTreeParser.parentsNotTooOld('@F3'), False)
-		
+
 	def test_sibling_spacing(self):
 		self.assertEqual(familyTreeParser.siblingSpacing('random'), False)
 		self.assertEqual(familyTreeParser.siblingSpacing(''), False)
@@ -141,6 +141,19 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.maleLastName('@I2@'), True)
 		self.assertEqual(familyTreeParser.maleLastName('@I3@'), False)
 		self.assertEqual(familyTreeParser.maleLastName('@I1@'), True)
+
+# sprint3
+# US17: checks for parent + children marriage
+	def test_us17_noChildrenMarriage(self):
+		self.assertEqual(familyTreeParser.noChildrenMarriage('badid'), False)
+		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
+		self.assertEqual(familyTreeParser.noChildrenMarriage(), True)
+
+# US18: checks for sibling marriage
+	def test_us18_noSiblingMarriage(self):
+		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
+		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
+		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
 
 if __name__ == "__main__":
 	unittest.main()
