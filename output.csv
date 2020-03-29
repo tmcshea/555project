@@ -1,22 +1,74 @@
 ID,Name,Gender,Birthday,Age,Alive,Death,Child,Spouse
-@I1@,Jimmy /Victor/,M,14 JUL 1800,220,True,NA,@F1@,NA
-@I2@,James /Victor/,M,15 JUL 1981,39,False,17 JUL 1949,@F2@,"['@F1@', '@F33@']"
-@I3@,Camron /Sullivan/,F,14 SEP 1980,40,False,12 APR 2050,@F3@,['@F1@']
-@I4@,Henry /Gather/,M,17 JUL 1950,70,False,17 JUL 1949,NA,['@F2@']
-@I5@,Betsy /Anderson/,F,15 MAY 1850,170,True,NA,NA,"['@F2@', '@F33@']"
-@I6@,Tyler /Sullivan/,M,13 SEP 2030,-10,False,17 JUL 1930,NA,['@F3@']
-@I7@,Patty /McShea/,F,17 JUL 1700,320,True,NA,NA,['@F3@']
-@I8@,Cammy /Victor/,F,1 DEC 1850,170,True,NA,@F1@,['@F18@']
+@I1@,Jim /Vicky/,M,15 OCT 2020,0,False,14 DEC 2020,@F3@,"['@F1@', '@F2@']"
+@I2@,Sam /Vicky/,F,18 NOV 1500,520,True,NA,NA,['@F1@']
+@I3@,Destiny /Tricks/,F,27 OCT 2020,0,True,NA,NA,"['@F2@', '@F4@']"
+@I4@,Henry /Vicky/,M,21 NOV 2020,0,True,NA,@F1@,NA
+@I5@,Happy /Tricks/,F,25 NOV 2020,0,True,NA,@F2@,NA
+@I6@,Drake /Vicky/,M,2 AUG 2021,-1,True,NA,@F1@,NA
+@I7@,Jimmy /Tricks/,M,11 JUN 1992,28,False,8 MAR 1991,NA,['@F4@']
+@I8@,Jasper /Buckets/,M,8 JUL 1980,40,False,12 JUL 2000,NA,"['@F3@', '@F6@']"
+@I9@,Heather /Vicky/,F,8 AUG 1981,39,False,12 JUL 2000,NA,['@F3@']
+@I10@,Jess /Buckets/,F,23 SEP 1979,41,True,NA,NA,['@F6@']
+@I11@,One /Vicky/,M,14 FEB 1998,22,True,NA,@F6@,NA
+@I12@,Two /Vicky/,F,14 FEB 1998,22,True,NA,@F6@,NA
+@I13@,Three /Vicky/,M,14 FEB 1998,22,True,NA,@F6@,NA
+@I14@,Four /Vicky/,F,14 FEB 1998,22,True,NA,@F6@,NA
+@I15@,Five /Vicky/,M,14 FEB 1998,22,True,NA,@F6@,NA
+@I16@,Six /Vicky/,F,14 FEB 1998,22,True,NA,@F6@,NA
+@I17@,Seven /Vicky/,F,7 AUG 0199,1821,True,NA,@F6@,NA
+@I18@,Eight /Vicky/,M,16 OCT 2001,19,True,NA,@F6@,NA
+@I19@,Nine /Vicky/,M,15 AUG 1970,50,True,NA,@F6@,NA
+@I20@,Ten /Vicky/,M,10 AUG 2001,19,True,NA,@F6@,NA
+@I21@,Eleven /Vicky/,F,9 SEP 3000,-980,True,NA,@F6@,NA
+@I22@,Twelve /Vicky/,F,9 AUG 2011,9,True,NA,@F6@,NA
+@I23@,Unlucky /Vicky/,M,13 MAY 0202,1818,True,NA,@F6@,NA
+@I24@,Fourteen /Vicky/,F,12 JUN 2014,6,True,NA,@F6@,NA
+@I25@,Fifteen /Vicky/,M,10 JUN 1987,33,True,NA,@F6@,NA
+@I26@,Sixteen /Vicky/,M,10 JUN 0203,1817,True,NA,@F6@,NA
 
 ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
-@F1@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],"['@I1@', '@I8@']"
-@F2@,15 MAY 1950,NA,['@I4@'],['Henry /Gather/'],['@I5@'],['Betsy /Anderson/'],['@I2@']
-@F3@,18 SEP 1980,17 JUL 1990,['@I6@'],['Tyler /Sullivan/'],['@I7@'],['Patty /McShea/'],['@I3@']
-@F33@,18 SEP 1981,17 JUL 1999,['@I6@'],['Tyler /Sullivan/'],['@I5@'],['Betsy /Anderson/'],['@I2@']
-@F4@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],['@I1@']
-@F5@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],['@I1@']
-@F18@,3 SEP 2011,30 MAY 2019,['@I2@'],['James /Victor/'],['@I8@'],['Cammy /Victor/'],['@I5@']
+@F1@,28 NOV 2020,NA,['@I1@'],['Jim /Vicky/'],['@I2@'],['Sam /Vicky/'],"['@I4@', '@I6@']"
+@F2@,23 OCT 2020,1 NOV 2020,['@I1@'],['Jim /Vicky/'],['@I3@'],['Destiny /Tricks/'],['@I5@']
+@F3@,16 DEC 1995,NA,['@I8@'],['Jasper /Buckets/'],['@I9@'],['Heather /Vicky/'],['@I1@']
+@F4@,31 OCT 2020,10 JUN 2019,['@I7@'],['Jimmy /Tricks/'],['@I3@'],['Destiny /Tricks/'],NA
+@F6@,13 AUG 1996,NA,['@I8@'],['Jasper /Buckets/'],['@I10@'],['Jess /Buckets/'],"['@I11@', '@I12@', '@I13@', '@I14@', '@I15@', '@I16@', '@I17@', '@I18@', '@I19@', '@I20@', '@I21@', '@I22@', '@I23@', '@I24@', '@I25@', '@I26@']"
 
-ERROR: FAMILY: US24: @F1@: Family has the same Spouses and marriage date as ['@F4@', '@F5@'], True
-ERROR: FAMILY: US24: @F4@: Family has the same Spouses and marriage date as ['@F1@', '@F5@'], True
-ERROR: FAMILY: US24: @F5@: Family has the same Spouses and marriage date as ['@F1@', '@F4@'], True
+Sprint One Errors: 
+ERROR: INDIVIDUAL: US01: @I1@: Birthday 15 OCT 2020 occurs in the future
+ERROR: INDIVIDUAL: US01: @I1@: Death 14 DEC 2020 occurs in the future
+ERROR: INDIVIDUAL: US07: @I2@: More than 150 years old - Birth - 18 NOV 1500 - Death - NA
+ERROR: INDIVIDUAL: US01: @I3@: Birthday 27 OCT 2020 occurs in the future
+ERROR: INDIVIDUAL: US01: @I4@: Birthday 21 NOV 2020 occurs in the future
+ANOMALY: FAMILY: US08: @F1@: Child @I4@ born 21 NOV 2020 before marriage on 28 NOV 2020
+ERROR: INDIVIDUAL: US01: @I5@: Birthday 25 NOV 2020 occurs in the future
+ERROR: INDIVIDUAL: US01: @I6@: Birthday 2 AUG 2021 occurs in the future
+ERROR: INDIVIDUAL: US03: @I7@: Died 8 MAR 1991 before born 11 JUN 1992
+ERROR: INDIVIDUAL: US07: @I17@: More than 150 years old - Birth - 7 AUG 0199 - Death - NA
+ANOMALY: FAMILY: US08: @F6@: Child @I17@ born 7 AUG 0199 before marriage on 13 AUG 1996
+ANOMALY: FAMILY: US08: @F6@: Child @I19@ born 15 AUG 1970 before marriage on 13 AUG 1996
+ERROR: INDIVIDUAL: US01: @I21@: Birthday 9 SEP 3000 occurs in the future
+ERROR: INDIVIDUAL: US07: @I23@: More than 150 years old - Birth - 13 MAY 0202 - Death - NA
+ANOMALY: FAMILY: US08: @F6@: Child @I23@ born 13 MAY 0202 before marriage on 13 AUG 1996
+ANOMALY: FAMILY: US08: @F6@: Child @I25@ born 10 JUN 1987 before marriage on 13 AUG 1996
+ERROR: INDIVIDUAL: US07: @I26@: More than 150 years old - Birth - 10 JUN 0203 - Death - NA
+ANOMALY: FAMILY: US08: @F6@: Child @I26@ born 10 JUN 0203 before marriage on 13 AUG 1996
+ERROR: FAMILY: US01: @F1@: Marriage 28 NOV 2020 occurs in the future
+ERROR: FAMILY: US01: @F2@: Marriage 23 OCT 2020 occurs in the future
+ERROR: FAMILY: US01: @F2@: Divorce 1 NOV 2020 occurs in the future
+ERROR: FAMILY: US02: @F2@: Wife's birth date 2020-10-27 after marriage date 2020-10-23
+ERROR: FAMILY: US01: @F4@: Marriage 31 OCT 2020 occurs in the future
+ERROR: FAMILY: US04: @F4@: Divorced 10 JUN 2019 before married 31 OCT 2020
+ERROR: FAMILY: US05: @F4@: Married 2020-10-31 after husband's (@I7@) death on 1991-03-08
+ERROR: FAMILY: US06: @F4@: Divorced 2019-06-10 after husbands (@I7@) death on 1991-03-08
+
+Sprint Two Errors: 
+ERROR: INDIVIDUAL: US11: @I8@ is married to multiple people at the same time
+ERROR: FAMILY: US12: @F1@: A parent gave birth to a kid while too old
+ERROR: FAMILY: US13: @F1@: Children are born too close together
+ERROR: FAMILY: US12: @F6@: A parent gave birth to a kid while too old
+ERROR: FAMILY: US13: @F6@: Children are born too close together
+ERROR: FAMILY: US15: @F6@: More than 5 siblings have the same birth
+ERROR: FAMILY: US15: @F6@: Family has more than 15 chilren
+ANOMALY: INDIVIDUAL: US16: @I1@: @I1@, Jim /Vicky/ has different last name then father @I8@, Jasper /Buckets/
+
+Sprint Three Errors: 
