@@ -1115,7 +1115,7 @@ def Sprint3():
 if(len(sys.argv) >= 2):
 	gedFile = str(sys.argv[1])
 else:
-	gedFile = 'test_bigamy_and_parents_age.ged'
+	gedFile = 'Sprint3_testing.ged'
 	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
