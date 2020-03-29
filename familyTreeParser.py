@@ -451,12 +451,12 @@ def marriageAfter14(famID):
 # Returns the families a person is part of
 # Input: id from individual Dictionary
 # Output: false if id is not found, empty list if no families, list of families otherwise
-def parseFamilies(id):
+def parseFamilies(id, famType = 'FAMS'):
 	if (id not in individual):
 		return False
-	if ('FAMS' not in individual[id]):
+	if (famType not in individual[id]):
 		return []
-	return individual[id]['FAMS']
+	return individual[id][famType]
 
 # helper function for noBigamy
 # Input: list of family dates in form [startDate, endDate]
@@ -655,7 +655,7 @@ def noChildrenMarriage(famID):
 		return True
 	# save husband and wife id
 	family = families[famID]
-	parents = [family['HUSB'], family['WIFE']]
+	parents = [family['HUSB'][0], family['WIFE'][0]]
 	# for every INDI children in list
 	if 'CHIL' in family:
 		for child in family['CHIL']:
@@ -663,9 +663,10 @@ def noChildrenMarriage(famID):
 				# check if any of their spouses in FAMS matches the parents
 				for fam in individual[child]['FAMS']:
 					newfamily = families[fam]
-					spouses = [newfamily['HUSB'], newfamily['WIFE']]
-					if parents in spouses:
-						return False
+					spouses = [newfamily['HUSB'][0], newfamily['WIFE'][0]]
+					for par in parents:
+						if par in spouses:
+							return False
 	return True
 
 # US18: checks for sibling marriage
@@ -686,14 +687,95 @@ def noSiblingMarriage(famID):
 				# go through every family kid's a spouse of
 				for childFam in childFamilyList:
 					# find opposite spouse id
-					if childFam['HUSB'] != child:
-						spouse = childFam['HUSB']
+					if families[childFam]['HUSB'] != child:
+						spouse = families[childFam]['HUSB'][0]
 					else:
-						spouse = childFam['WIFE']
+						spouse = families[childFam]['WIFE'][0]
 					# if spouse is sibling, return false
 					if spouse in childrenList:
 						return False
 	return True
+
+# Returns all the children a person has
+# Input: person ID
+def parseChildren(id):
+	if id not in individual:
+		return False
+	allFamilies = parseFamilies(id)
+	kids = []
+	for fam in allFamilies:
+		if 'CHIL' not in families[fam]:
+			continue
+		for kid in families[fam]['CHIL']:
+			kids.append(kid)
+	return kids
+
+# Returns all the spouses a person has or has had
+# Input: person ID
+def parseSpouses(id):
+	if id not in individual:
+		return False
+	familiesMemberOf = parseFamilies(id)
+	spouses = []
+	for fam in familiesMemberOf:
+		if('HUSB' in families[fam] and families[fam]['HUSB'][0] != id):
+			spouses.append(families[fam]['HUSB'][0])
+		if('WIFE' in families[fam] and families[fam]['WIFE'][0] != id):
+			spouses.append(families[fam]['WIFE'][0])
+	return spouses
+
+# US19: checks for first cousin marraige
+# Input: famID
+def noCousinMarraige(famID):
+	if famID not in families:
+		return True
+	family = families[famID]
+	parents = [family['HUSB'][0], family['WIFE'][0]]
+	if ('FAMC' not in individual[parents[0]] or 'FAMC' not in individual[parents[1]]):
+		return True
+	if (individual[parents[0]]['FAMC'] == individual[parents[1]]['FAMC']):
+		return True
+	fatherFamily = families[individual[parents[0]]['FAMC']]
+	motherFamily = families[individual[parents[1]]['FAMC']]
+	paternalGrandparents = [fatherFamily['HUSB'][0], fatherFamily['WIFE'][0]]
+	maternalGrandparents = [motherFamily['HUSB'][0], motherFamily['WIFE'][0]]
+	paternalFamilies = []
+	paternalFamilies.append(parseFamilies(paternalGrandparents[0], 'FAMC'))
+	paternalFamilies.append(parseFamilies(paternalGrandparents[1], 'FAMC'))
+	maternalFamilies = []
+	maternalFamilies.append(parseFamilies(maternalGrandparents[0], 'FAMC'))
+	maternalFamilies.append(parseFamilies(maternalGrandparents[1], 'FAMC'))
+	for fam in paternalFamilies:
+		if(fam != [] and fam in maternalFamilies):
+			return False
+	return True
+
+# Input: id for uncel/aunt, and an id to check against
+def checkIfUncleOrAunt(id, idToCheck):
+	if id not in individual:
+		return False
+	# get families they are a child of
+	familyAsKid = parseFamilies(id, 'FAMC')
+	if(type(familyAsKid)!=list):
+		familyAsKid = [familyAsKid]
+	for fam in familyAsKid:
+		otherKidsInFamily = families[fam]['CHIL']
+		for kid in otherKidsInFamily:
+			kidsKids = parseChildren(kid)
+			if(idToCheck in kidsKids):
+				return True
+	return False
+
+# US20: aunts and uncles should not marry nieces and nephews
+# Input: famID
+def noAuntsAndUncles(famID):
+	if famID not in families:
+		return False
+	family = families[famID]
+	parents = [family['HUSB'][0], family['WIFE'][0]]
+	fatherUncle = checkIfUncleOrAunt(parents[0], parents[1])
+	motherAunt = checkIfUncleOrAunt(parents[1], parents[0])
+	return not (fatherUncle or motherAunt)
 
 # US21: Checks for correct gender for role in family
 # Input: famID
@@ -763,6 +845,7 @@ def uniqueFamilySpouse(famid):
 		return [sameFamily, True]
 	else:
 		return [[], False]
+
 
 
 def Sprint1():
@@ -969,6 +1052,7 @@ def Sprint2():
 			csv_file.write("\n")
 
 def Sprint3():
+
 	print()
 	print("Sprint Three Errors: ")
 	csv_file.write("\n")
@@ -998,6 +1082,22 @@ def Sprint3():
 			csv_file.write('ERROR: FAMILY: US18: ' + famID + ': Siblings are married.')
 			csv_file.write("\n")
 
+		# US19 - cousins
+		if (noCousinMarraige(famID) == False):
+			print('ERROR: FAMILY: US19: {}: Family has two married first cousins'.format(famID))
+			csv_file.write('ERROR: FAMILY: US19: {}: Family has two married first cousins'.format(famID))
+			csv_file.write('\n')
+
+		# US20 - aunt/uncle and niece/nephew
+		if (noAuntsAndUncles(famID) == False):
+			print('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
+			csv_file.write('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
+			csv_file.write('\n')
+
+		if (not checkGenderRole(famID)):
+			print('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
+			csv_file.write('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
+			csv_file.write('\n')
 		uniqueResults = uniqueFamilySpouse(famID)
 		if (uniqueResults[1]):
 			print('ERROR: FAMILY: US24: ' + famID + ': Family has the same Spouses and marriage date as ', end = "")
@@ -1009,7 +1109,6 @@ def Sprint3():
 				else:
 					csv_file.write(str(items))
 			csv_file.write("\n")
-
 
 
 # added a default file for testing purposes
@@ -1024,7 +1123,5 @@ display()
 Sprint1()
 Sprint2()
 Sprint3()
-
-
 
 # Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
