@@ -202,7 +202,6 @@ def age_during_marriage(birth, marr):
 # Output: indv:	[birth, death]
 # 		  fam:	[marriage, divorce]
 
-
 def datesBeforeCurrentDate(id):
 	now = datetime.today()  # today's date
 	results = [True, True]
@@ -230,7 +229,6 @@ def datesBeforeCurrentDate(id):
 # Input: family ID
 # Output: [husband, wife]
 
-
 def bornBeforeMarriage(famID):
 	results = []
 	if(famID in families and "MARR" in families[famID]):
@@ -251,8 +249,6 @@ def bornBeforeMarriage(famID):
 
 # US03: checks to see if birth occurs before death
 # Input: id tag from individual Dictionary
-
-
 def birthBeforeDeath(id):
 	if(id not in individual):
 		return False
@@ -267,8 +263,6 @@ def birthBeforeDeath(id):
 
 # US04: checks to see if marriage is before divorce
 # Input: famID tag from families Dictionary
-
-
 def marriageBeforeDivorce(famID):
 	if(famID not in families):
 		return False
@@ -283,8 +277,6 @@ def marriageBeforeDivorce(famID):
 
 # US05: Checks to see if marriage occured before death of either spouse
 # Input: famID tag from families Dictionary
-
-
 def marriageBeforeDeath(famID):
 	results = []
 	if(famID in families and 'MARR' in families[famID]):
@@ -304,8 +296,6 @@ def marriageBeforeDeath(famID):
 
 # US06: Checks to see if divorce occured before death of either spouse
 # Input: famID tag from families Dictionary
-
-
 def divorceBeforeDeath(famID):
 	results = [None, None]
 	if(famID in families and 'DIV' in families[famID]):
@@ -325,8 +315,6 @@ def divorceBeforeDeath(famID):
 
 # US07: checks to make sure person is less thre 150 years old
 # Input: id tag from individual Dictionary
-
-
 def lessThan150(id):
 	if(id not in individual):
 		return False
@@ -337,8 +325,6 @@ def lessThan150(id):
 
 # US08: checks if marriage happens before child's birth
 # Input: id tag from individual Dictionary
-
-
 def marriageBeforeBirth(id):
 	if(id not in individual):
 		return False
@@ -360,8 +346,6 @@ def marriageBeforeBirth(id):
 
 # US08.5: checks if divorce is after child's birth
 # Input: id tag from individual Dictionary
-
-
 def divorceAfterBirth(id):
 	if(id not in individual):
 		return False
@@ -393,11 +377,13 @@ def divorceAfterBirth(id):
 # Input: id tag from individual dictionary
 # Output: [wife death makes sense, husb "]
 # ************** NOT TESTED YET
-
-
 def bornBeforeParentDeath(id):
 	if (id not in individual):
+<<<<<<< HEAD
 	    return 'INDVIDERROR'
+=======
+		return 'INDVIDERROR'
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 
 	result = [True, True]
 	birth = parseDate(individual[id]['BIRT'])
@@ -470,9 +456,6 @@ def marriageAfter14(famID):
 # Returns the families a person is part of
 # Input: id from individual Dictionary
 # Output: false if id is not found, empty list if no families, list of families otherwise
-
-
-
 def parseFamilies(id):
 	if (id not in individual):
 		return False
@@ -482,8 +465,6 @@ def parseFamilies(id):
 
 # helper function for noBigamy
 # Input: list of family dates in form [startDate, endDate]
-
-
 def noBigamyHelper(famList):
 	for fam in famList:
 		for otherFam in famList:
@@ -495,11 +476,9 @@ def noBigamyHelper(famList):
 				return False
 	return True
 
-# US011: checks to make sure a person is not in two families at once
+# US11: checks to make sure a person is not in two families at once
 # Input: id from individuals Dictionary
 # NOTE: will also return false if marraige occurs after death
-
-
 def noBigamy(id):
 	MAXDATE = parseDate('31 DEC 9999')
 	if (id not in individual):
@@ -526,10 +505,8 @@ def noBigamy(id):
 	valid = noBigamyHelper(allDatesList)
 	return valid
 
-# US012: checks to make sure parents are correct ages in relation to their kids.
+# US12: checks to make sure parents are correct ages in relation to their kids.
 # Input: famID tag from families Dictionary
-
-
 def parentsNotTooOld(famID):
 	if ('HUSB' not in families[famID] or 'WIFE' not in families[famID]):
 		return False
@@ -544,11 +521,10 @@ def parentsNotTooOld(famID):
 		if ((wifeAge - kidAge >= 60) or (husbAge - kidAge >= 80)):
 			return False
 	return True
-# US013: Birth dates of siblings must be more than 8 months apart or
+
+# US13: Birth dates of siblings must be more than 8 months apart or
 # fewer than 2 days apart
 # Input: famID tag from families Dictionary
-
-
 def siblingSpacing(famID):
 	if(famID not in families):
 		return False
@@ -575,8 +551,7 @@ def siblingSpacing(famID):
 					return False
 	return True
 
-
-# US014: No more than 5 sibilings should be born at the same time
+# US14: No more than 5 sibilings should be born at the same time
 # Input: famID tag from families Dictionary
 def siblingSameBirth(famID):
 	if(famID not in families):
@@ -597,8 +572,6 @@ def siblingSameBirth(famID):
 			if (birthday_siblings[i] >= 5):
 				return False
 		return True
-# US015: checks to see that a family has less then 15 siblings
-
 
 # US15: checks to see that a family has less then 15 siblings
 # Input: famID tag from families Dictionary
@@ -624,8 +597,13 @@ def parserLastName(id):
 		name = individual[id]['NAME'].split()
 		return name[1][1:-1]
 
+<<<<<<< HEAD
 # US16: checks to see that a family has less then 15 siblings
 # Input: id tag from individual Dictionary
+=======
+# Helper function for US16
+# Input: famID tag from families Dictionary
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 def maleLastNameHelper(id):
 	if(id not in individual):
 		return False
@@ -653,8 +631,13 @@ def maleLastNameHelper(id):
 	else:
 		return False
 
+<<<<<<< HEAD
 # US016: checks to see that a family has less then 15 siblings
 # Input: id tag from individual Dictionary
+=======
+# US16: checks to see that a family has less then 15 siblings
+# Input: famID tag from families Dictionary
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 def maleLastName(id):
 	if (id not in individual or individual[id]['SEX'] != 'M'):
 		return False
@@ -668,6 +651,7 @@ def maleLastName(id):
 				maleLastName(chil)
 	return True
 
+<<<<<<< HEAD
 # US23: check to see if there is only one person with the same
 # 		name and birthday.
 # Input: id tag from individual Dictionary
@@ -703,6 +687,54 @@ def uniqueFamilySpouse(famid):
 		return [sameFamily, True]
 	else:
 		return [[], False]
+=======
+# US17: checks for parent + children marriage
+# Input: famID from families dictionary
+# TODO: test US17
+def noChildrenMarriage(famID):
+	if famID not in families:
+		return False
+	# save husband and wife id
+	family = families[famID]
+	parents = [family['HUSB'], family['WIFE']]
+	# for every INDI children in list
+	for child in family['CHIL']:
+		if 'FAMS' not in individual[child]:
+			pass
+		# check if any of their spouses in FAMS matches the parents
+		for fam in individual[child]['FAMS']:
+			newfamily = families[fam]
+			spouses = [newfamily['HUSB'], newfamily['WIFE']]
+			if parents in spouses:
+				return False
+	return True
+
+# US18: checks for sibling marriage
+# Input: famID	# use len()
+def noSiblingMarriage(famID):
+	if famID not in families:
+		return False
+	# check if an only child, return true if yes
+	family = families[famID]
+	childrenList = family['CHIL']
+	if len(childrenList) < 2:
+		return True
+	# go through spouse list in each kid
+	for child in childrenList:
+		childFamilyList = individual[child]['FAMS']
+		# go through every family kid's a spouse of
+		for childFam in childFamilyList:
+			# find opposite spouse id
+			if childFam['HUSB'] != child:
+				spouse = childFam['HUSB']
+			else:
+				spouse = childFam['WIFE']
+			# if spouse is sibling, return false
+			if spouse in childrenList:
+				return False
+	return True
+
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 def Sprint1():
 	for id in individual:
 		# US01 error check
@@ -839,6 +871,34 @@ def Sprint2():
 		if (individual[id]['SEX'] == 'M' and 'FAMC' not in individual[id]):
 			maleLastName(id)
 
+<<<<<<< HEAD
+=======
+	for famID in families:
+		if (siblingSpacing(famID) == False):
+			print("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+			csv_file.write("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+			csv_file.write("\n")
+		if (siblingSameBirth(famID) == False):
+			print("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
+			csv_file.write("ERROR: FAMILY: US15: " + famID + ": More than 5 siblings have the same birth")
+			csv_file.write("\n")
+		if (less15Siblings(famID) == False):
+			print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+			csv_file.write("\n")
+
+	for id in lastNameBool:
+		if(lastNameBool[id] == False):
+			father = families[individual[id]['FAMC']]['HUSB'][0]
+			fatherName = individual[father]['NAME']
+			print("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+						 " has different last name then father " + father + ", " + fatherName)
+			csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+						 " has different last name then father " + father + ", " + fatherName)
+			csv_file.write("\n")
+	
+	for id in individual:
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 		if (noBigamy(id) == False):
 			print('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
 			csv_file.write('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
@@ -912,6 +972,7 @@ def Sprint2():
 			csv_file.write("\n")
 
 def Sprint3():
+<<<<<<< HEAD
 
 	for id in individual:
 		uniqueResults = uniqueName(id)
@@ -928,15 +989,28 @@ def Sprint3():
 			print(*uniqueResults[0], sep= ", ")
 			# csv_file.write('ERROR: FAMILY: US24: ' + famID + ': Family has the same Spouses and marriage date as ' + *uniqueResults[0], sep= ", ")
 			# csv_file.write("\n")
+=======
+	return False
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
 	gedFile = str(sys.argv[1])
 else:
 	gedFile = 'test_bigamy_and_parents_age.ged'
+	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
 display()
 # Sprint1()
 # Sprint2()
 Sprint3()
+<<<<<<< HEAD
+=======
+# print("\n")
+# print(individual)
+# print("\n")
+# print(families)
+
+# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
+>>>>>>> 9682265c52a15ce413525ed773b3f35fc03d8de8
