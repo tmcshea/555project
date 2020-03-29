@@ -376,7 +376,6 @@ def divorceAfterBirth(id):
 # US09: checks if individuals are born BEFORE parents' deaths
 # Input: id tag from individual dictionary
 # Output: [wife death makes sense, husb "]
-# ************** NOT TESTED YET
 def bornBeforeParentDeath(id):
 	if (id not in individual):
 		return 'INDVIDERROR'
@@ -597,9 +596,6 @@ def parserLastName(id):
 		return name[1][1:-1]
 
 
-# US16: checks to see that a family has less then 15 siblings
-# Input: id tag from individual Dictionary
-
 # Helper function for US16
 # Input: famID tag from families Dictionary
 
@@ -631,7 +627,7 @@ def maleLastNameHelper(id):
 		return False
 
 
-# US016: checks to see that a family has less then 15 siblings
+# US016: checks to if all males have thje same last name in family
 # Input: id tag from individual Dictionary
 
 # US16: checks to see that a family has less then 15 siblings
@@ -699,6 +695,35 @@ def noSiblingMarriage(famID):
 						return False
 	return True
 
+# US21: Checks for correct gender for role in family
+# Input: famID
+def checkGenderRole(famID):
+	if famID not in families:
+		return False
+	family = families[famID]
+	husbandID = family['HUSB'][0]
+	wifeID = family['WIFE'][0]
+
+	husbandGender = individual[husbandID]['SEX']
+	wifeGender = individual[wifeID]['SEX']
+
+	if husbandGender == 'F' or wifeGender == 'M':
+		return False
+	return True
+
+# US22: All individuals and families have a unique ID
+# Input: none
+def uniqueIDs():
+	for a in individual:
+		for b in individual:
+			if a['INDI'] == b['INDI']:
+				return False
+	for a in families:
+		for b in families:
+			if a['FAMS'] == b['FAMS']:
+				return False
+
+	return True
 
 # US23: check to see if there is only one person with the same
 # 		name and birthday.
@@ -738,8 +763,6 @@ def uniqueFamilySpouse(famid):
 		return [sameFamily, True]
 	else:
 		return [[], False]
-
-
 
 
 def Sprint1():
