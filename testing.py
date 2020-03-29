@@ -185,8 +185,11 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.checkGenderRole('@F12@'), True)
 		self.assertEqual(familyTreeParser.checkGenderRole('@F1@'), True)
 
+# US22: check to make sure every ID is unique
+	def test_us22_uniqueIDs(self):
+		self.assertEqual(familyTreeParser.uniqueIDs(), True)
 
-# US23: check for marraige between uncle/aunt and neice/nephew
+# US23: check for unique name
 	def test_us23_uniqueName(self):
 		self.assertEqual(familyTreeParser.uniqueName('random'), [[],False])
 		self.assertEqual(familyTreeParser.uniqueName(''), [[],False])
@@ -195,8 +198,8 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.uniqueName('@I3@'), [[],False])
 		self.assertEqual(familyTreeParser.uniqueName('@F3@'), [[],False])
 
-	# US23: check for marraige between uncle/aunt and neice/nephew
-	def test_us23_uniqueFamilySpouse(self):
+	# US24: check for unique family spouse
+	def test_us24_uniqueFamilySpouse(self):
 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('random'), [[],False])
 		self.assertEqual(familyTreeParser.uniqueFamilySpouse(''), [[],False])
 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F12@'), [['@F14@'],True])
