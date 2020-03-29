@@ -735,12 +735,32 @@ def noCousinMarraige(famID):
 			return False
 	return True
 
+# Input: id for uncel/aunt, and an id to check against
+def checkIfUncleOrAunt(id, idToCheck):
+	if id not in individual:
+		return False
+	# get families they are a child of
+	familyAsKid = parseFamilies(id, 'FAMC')
+	if(type(familyAsKid)!=list):
+		familyAsKid = [familyAsKid]
+	for fam in familyAsKid:
+		otherKidsInFamily = families[fam]['CHIL']
+		for kid in otherKidsInFamily:
+			kidsKids = parseChildren(kid)
+			if(idToCheck in kidsKids):
+				return True
+	return False
+
 # US20: aunts and uncles should not marry nieces and nephews
 # Input: famID
 def noAuntsAndUncles(famID):
 	if famID not in families:
 		return False
-	
+	family = families[famID]
+	parents = [family['HUSB'][0], family['WIFE'][0]]
+	fatherUncle = checkIfUncleOrAunt(parents[0], parents[1])
+	motherAunt = checkIfUncleOrAunt(parents[1], parents[0])
+	return not (fatherUncle or motherAunt)
 
 def Sprint1():
 	for id in individual:
@@ -978,6 +998,7 @@ Sprint3()
 # print(individual)
 # print("\n")
 # print(families)
-print(noCousinMarraige('@F433@'))
+# print(noCousinMarraige('@F433@'))
+print(noAuntsAndUncles('@F7@'))
 
 # Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged

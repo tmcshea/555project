@@ -12,6 +12,7 @@ ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
 @F2@,15 MAY 1950,NA,['@I4@'],['Henry /Gather/'],['@I5@'],['Betsy /Anderson/'],['@I2@']
 @F18@,3 SEP 2011,30 MAY 2019,['@I2@'],['James /Victor/'],['@I8@'],['Cammy /Victor/'],['@I5@']
 @F3@,18 SEP 1980,17 JUL 1990,['@I6@'],['Tyler /Sullivan/'],['@I7@'],['Patty /McShea/'],['@I3@']
+@F7@,6 JUL 1392,NA,['@I1@'],['Jimmy /Victor/'],['@I7@'],['Patty /McShea/'],NA
 @F1@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],"['@I1@', '@I8@']"
 @F33@,18 SEP 1981,17 JUL 1999,['@I6@'],['Tyler /Sullivan/'],['@I5@'],['Betsy /Anderson/'],"['@I2@', '@I7@']"
 @F433@,5 JUN 2010,NA,['@I3@'],['Camron /Sullivan/'],['@I5@'],['Betsy /Anderson/'],NA
