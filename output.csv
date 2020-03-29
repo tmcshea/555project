@@ -1,19 +1,23 @@
 ID,Name,Gender,Birthday,Age,Alive,Death,Child,Spouse
-@I7@,Patty /McShea/,F,17 JUL 1700,320,True,NA,@F33@,['@F3@']
+@I7@,Patty /McShea/,F,17 JUL 1700,320,True,NA,NA,['@F3@']
+@I9@,kid 2,M,24 JUN 1242,778,True,NA,@F1@,NA
 @I6@,Tyler /Sullivan/,M,13 SEP 2030,-10,False,17 JUL 1930,NA,['@F3@']
+@I11@,person married,F,5 MAY 2020,0,True,NA,@F5@,['@F6@']
 @I4@,Henry /Gather/,M,17 JUL 1950,70,False,17 JUL 1949,NA,['@F2@']
-@I8@,Cammy /Victor/,F,1 DEC 1850,170,True,NA,@F1@,['@F18@']
-@I5@,Betsy /Anderson/,F,15 MAY 1850,170,True,NA,@F18@,"['@F2@', '@F33@', '@F433@']"
+@I8@,doesnt matter,F,23 JUN 1222,798,True,NA,@F2@,['@F5@']
+@I5@,Betsy /Anderson/,F,15 MAY 1950,70,True,NA,NA,['@F2@']
+@I10@,new Person,M,4 JUL 3030,-1010,True,NA,NA,['@F5@']
 @I1@,Jimmy /Victor/,M,14 JUL 1800,220,True,NA,@F1@,NA
-@I3@,Camron /Sullivan/,F,14 SEP 1980,40,False,12 APR 2050,@F3@,"['@F1@', '@F433@']"
-@I2@,James /Victor/,M,15 JUL 1981,39,False,17 JUL 1949,@F33@,"['@F1@', '@F18@']"
+@I3@,Camron /Sullivan/,F,14 SEP 1980,40,False,12 APR 2050,@F3@,['@F1@']
+@I2@,James /Victor/,M,15 JUL 1981,39,False,17 JUL 1949,@F2@,['@F1@']
 
 ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
-@F2@,15 MAY 1950,NA,['@I4@'],['Henry /Gather/'],['@I5@'],['Betsy /Anderson/'],['@I2@']
-@F18@,3 SEP 2011,30 MAY 2019,['@I2@'],['James /Victor/'],['@I8@'],['Cammy /Victor/'],['@I5@']
-@F3@,18 SEP 1980,17 JUL 1990,['@I6@'],['Tyler /Sullivan/'],['@I7@'],['Patty /McShea/'],['@I3@']
-@F7@,6 JUL 1392,NA,['@I1@'],['Jimmy /Victor/'],['@I7@'],['Patty /McShea/'],NA
-@F1@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],"['@I1@', '@I8@']"
-@F33@,18 SEP 1981,17 JUL 1999,['@I6@'],['Tyler /Sullivan/'],['@I5@'],['Betsy /Anderson/'],"['@I2@', '@I7@']"
-@F433@,5 JUN 2010,NA,['@I3@'],['Camron /Sullivan/'],['@I5@'],['Betsy /Anderson/'],NA
+@F2@,15 MAY 1950,NA,['@I4@'],['Henry /Gather/'],['@I5@'],['Betsy /Anderson/'],"['@I2@', '@I8@']"
+@F3@,18 SEP 2020,17 JUL 1940,['@I6@'],['Tyler /Sullivan/'],['@I7@'],['Patty /McShea/'],['@I3@']
+@F6@,5 DEC 2010,NA,['@I9@'],['kid 2'],['@I11@'],['person married'],NA
+@F1@,14 OCT 1998,17 AUG 1995,['@I2@'],['James /Victor/'],['@I3@'],['Camron /Sullivan/'],"['@I1@', '@I9@']"
+@F5@,4 AUG 9320,NA,['@I10@'],['new Person'],['@I8@'],['doesnt matter'],['@I11@']
+@F4@,30 SEP 3033,NA,['@I1@'],['Jimmy /Victor/'],['@I8@'],['doesnt matter'],NA
 
+ERROR: FAMILY: US19: @F6@: Family is two married first cousins
+ERROR: FAMILY: US20: @F4@: Family is an aunt or uncle married to a niece or nephew

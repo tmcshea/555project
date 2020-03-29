@@ -725,7 +725,8 @@ def noCousinMarraige(famID):
 	paternalGrandparents = [fatherFamily['HUSB'][0], fatherFamily['WIFE'][0]]
 	maternalGrandparents = [motherFamily['HUSB'][0], motherFamily['WIFE'][0]]
 	paternalFamilies = []
-	paternalFamilies.append(parseFamilies(paternalGrandparents[0], 'FAMC'))
+	paternalFamilies.appe
+	nd(parseFamilies(paternalGrandparents[0], 'FAMC'))
 	paternalFamilies.append(parseFamilies(paternalGrandparents[1], 'FAMC'))
 	maternalFamilies = []
 	maternalFamilies.append(parseFamilies(maternalGrandparents[0], 'FAMC'))
@@ -980,13 +981,24 @@ def Sprint2():
 			csv_file.write("\n")
 
 def Sprint3():
+	for famID in families:
+		# US19 - cousins
+		if (noCousinMarraige(famID) == False):
+			print('ERROR: FAMILY: US19: {}: Family is two married first cousins'.format(famID))
+			csv_file.write('ERROR: FAMILY: US19: {}: Family is two married first cousins'.format(famID))
+			csv_file.write('\n')
+		# US20 - aunt/uncle and niece/nephew
+		if (noAuntsAndUncles(famID) == False):
+			print('ERROR: FAMILY: US20: {}: Family is an aunt or uncle married to a niece or nephew'.format(famID))
+			csv_file.write('ERROR: FAMILY: US20: {}: Family is an aunt or uncle married to a niece or nephew'.format(famID))
+			csv_file.write('\n')
 	return False
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
 	gedFile = str(sys.argv[1])
 else:
-	gedFile = 'test_bigamy_and_parents_age.ged'
+	gedFile = 'test_error_family.ged'
 	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
@@ -999,6 +1011,5 @@ Sprint3()
 # print("\n")
 # print(families)
 # print(noCousinMarraige('@F433@'))
-print(noAuntsAndUncles('@F7@'))
 
 # Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
