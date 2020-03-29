@@ -155,5 +155,16 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
 		self.assertEqual(familyTreeParser.noChildrenMarriage(), False)
 
+# US21: checks for correct gender for family role
+	def test_us21_checkGenderRole(self):
+		self.assertEqual(familyTreeParser.checkGenderRole(''), False)
+		self.assertEqual(familyTreeParser.checkGenderRole('@I2@'), True)
+		self.assertEqual(familyTreeParser.checkGenderRole('@I3@'), True)
+		self.assertEqual(familyTreeParser.checkGenderRole('@I4@'), True)
+
+# US22: checks for unique IDs for family and individual
+	def test_us22_uniqueIDs(self):
+		self.assertEqual(familyTreeParser.uniqueIDs(), True)
+
 if __name__ == "__main__":
 	unittest.main()
