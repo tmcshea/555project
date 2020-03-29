@@ -725,8 +725,7 @@ def noCousinMarraige(famID):
 	paternalGrandparents = [fatherFamily['HUSB'][0], fatherFamily['WIFE'][0]]
 	maternalGrandparents = [motherFamily['HUSB'][0], motherFamily['WIFE'][0]]
 	paternalFamilies = []
-	paternalFamilies.appe
-	nd(parseFamilies(paternalGrandparents[0], 'FAMC'))
+	paternalFamilies.append(parseFamilies(paternalGrandparents[0], 'FAMC'))
 	paternalFamilies.append(parseFamilies(paternalGrandparents[1], 'FAMC'))
 	maternalFamilies = []
 	maternalFamilies.append(parseFamilies(maternalGrandparents[0], 'FAMC'))
