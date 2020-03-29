@@ -398,7 +398,7 @@ def divorceAfterBirth(id):
 def bornBeforeParentDeath(id):
 	if (id not in individual):
 	    return 'INDVIDERROR'
-        
+
 	result = [True, True]
 	birth = parseDate(individual[id]['BIRT'])
 
@@ -625,7 +625,7 @@ def parserLastName(id):
 		return name[1][1:-1]
 
 # US16: checks to see that a family has less then 15 siblings
-# Input: famID tag from families Dictionary
+# Input: id tag from individual Dictionary
 def maleLastNameHelper(id):
 	if(id not in individual):
 		return False
@@ -654,7 +654,7 @@ def maleLastNameHelper(id):
 		return False
 
 # US016: checks to see that a family has less then 15 siblings
-# Input: famID tag from families Dictionary
+# Input: id tag from individual Dictionary
 def maleLastName(id):
 	if (id not in individual or individual[id]['SEX'] != 'M'):
 		return False
@@ -668,6 +668,41 @@ def maleLastName(id):
 				maleLastName(chil)
 	return True
 
+# US23: check to see if there is only one person with the same
+# 		name and birthday.
+# Input: id tag from individual Dictionary
+def uniqueName(id):
+	if (id not in individual):
+		return [[],False]
+
+	sameName = []
+	for people in individual:
+		if (people != id and individual[id]['NAME'] == individual[people]['NAME']):
+			if (individual[id]['BIRT'] == individual[people]['BIRT']):
+				sameName.append(people)
+
+	if (len(sameName) != 0):
+		return [sameName, True]
+	else:
+		return [[], False]
+
+def uniqueFamilySpouse(famid):
+	if (famid not in families):
+		return [[], False]
+
+	sameFamily = []
+	wife = families[famid]['WIFE'][0]
+	husband = families[famid]['HUSB'][0]
+
+	for family in families:
+		if (famid != family and families[family]['WIFE'][0] == wife and families[famid]['HUSB'][0] == husband):
+			if(families[family]['MARR'] == families[famid]['MARR']):
+				sameFamily.append(family)
+
+	if (len(sameFamily) != 0):
+		return [sameFamily, True]
+	else:
+		return [[], False]
 def Sprint1():
 	for id in individual:
 		# US01 error check
@@ -804,48 +839,17 @@ def Sprint2():
 		if (individual[id]['SEX'] == 'M' and 'FAMC' not in individual[id]):
 			maleLastName(id)
 
-	for famID in families:
-		if (siblingSpacing(famID) == False):
-			print("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
-			csv_file.write("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
-			csv_file.write("\n")
-		if (siblingSameBirth(famID) == False):
-			print("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
-			csv_file.write("ERROR: FAMILY: US15: " + famID + ": More than 5 siblings have the same birth")
-			csv_file.write("\n")
-		if (less15Siblings(famID) == False):
-			print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
-			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
-			csv_file.write("\n")
-	
-	for id in lastNameBool:
-		if(lastNameBool[id] == False):
-			father = families[individual[id]['FAMC']]['HUSB'][0]
-			fatherName = individual[father]['NAME']
-			print("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
-						 " has different last name then father " + father + ", " + fatherName)
-			csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
-						 " has different last name then father " + father + ", " + fatherName)
-			csv_file.write("\n")
-	
-	for id in individual:
 		if (noBigamy(id) == False):
 			print('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
 			csv_file.write('ERROR: INDIVIDUAL: US11: ' + id + ' is married to multiple people at the same time')
 			csv_file.write("\n")
 
-	for famID in families:
-		if (parentsNotTooOld(famID) == False):
-			print('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
-			csv_file.write('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
-			csv_file.write("\n")
-	for id in individual:
 		# US09 - bornBeforeParentDeath : [wife death, husb death]
 		if (bornBeforeParentDeath(id) == 'INDVIDERROR'):
-			print("ERROR: US09: INDIVIDUAL: " + id +
-				": ID is giving an error")
+			print("ERROR: INDIVIDUAL: US09:  " + id +
+				": ID is giving an erro")
 		if (bornBeforeParentDeath(id) == 'FAMIDERROR'):
-			print("ERROR: US09: INDIVIDUAL: " + id +
+			print("ERROR: INDIVIDUAL: US09:  " + id +
 				": ID is giving an error")
 		if (bornBeforeParentDeath(id) == 'NOTACHILD'):
 			pass
@@ -859,13 +863,41 @@ def Sprint2():
 		if (individual[id]['SEX'] == 'M' and 'FAMC' not in individual[id]):
 			maleLastName(id)
 
+	for id in lastNameBool:
+		if(lastNameBool[id] == False):
+			father = families[individual[id]['FAMC']]['HUSB'][0]
+			fatherName = individual[father]['NAME']
+			print("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+						 " has different last name then father " + father + ", " + fatherName)
+			csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
+						 " has different last name then father " + father + ", " + fatherName)
+			csv_file.write("\n")
+
 	for famID in families:
+		# US13
+		if (siblingSpacing(famID) == False):
+			print("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+			csv_file.write("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
+			csv_file.write("\n")
+
+		# US14
+		if (siblingSameBirth(famID) == False):
+			print("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
+			csv_file.write("ERROR: FAMILY: US15: " + famID + ": More than 5 siblings have the same birth")
+			csv_file.write("\n")
+
+		# US15
+		if (less15Siblings(famID) == False):
+			print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
+			csv_file.write("\n")
+
 		# US10 - marriageAfter14 : [ wife, husb ]
 		if (not marriageAfter14(famID)[0]):
-			print("ERROR: US10: FAMILY: " + famID +
+			print("ERROR: FAMILY: US10:  " + famID +
 				": Mother married before 14" )
 		if (not marriageAfter14(famID)[1]):
-			print("ERROR: US10: FAMILY: " + famID +
+			print("ERROR: FAMILY: US10:  " + famID +
 				": Father married before 14" )
 
 		# US15 - less15Siblings
@@ -874,16 +906,28 @@ def Sprint2():
 			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
 			csv_file.write("\n")
 
-	for id in lastNameBool:
-		# US16 - maleLastName
-		if(lastNameBool[id] == False):
-			father = families[individual[id]['FAMC']]['HUSB'][0]
-			fatherName = individual[father]['NAME']
-			print("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
-						" has different last name then father " + father + ", " + fatherName)
-			csv_file.write("ANOMALY: INDIVIDUAL: US16: " + id + ": " + id + ", " + individual[id]['NAME'] +
-						" has different last name then father " + father + ", " + fatherName)
+		if (parentsNotTooOld(famID) == False):
+			print('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
+			csv_file.write('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
 			csv_file.write("\n")
+
+def Sprint3():
+
+	for id in individual:
+		uniqueResults = uniqueName(id)
+		if (uniqueResults[1]):
+			print('ERROR: INDIVIDUAL: US23: ' + id + ': Individial has the same name and birthday as ', end = "")
+			print(*uniqueResults[0], sep= ", ")
+			# csv_file.write('ERROR: INDIVIDUAL: US23: ' + id + ': Individial has the same name and birthday as ' + *uniqueResults[0], sep= ", ")
+			# csv_file.write("\n")
+
+	for famID in families:
+		uniqueResults = uniqueFamilySpouse(famID)
+		if (uniqueResults[1]):
+			print('ERROR: FAMILY: US24: ' + famID + ': Family has the same Spouses and marriage date as ', end = "")
+			print(*uniqueResults[0], sep= ", ")
+			# csv_file.write('ERROR: FAMILY: US24: ' + famID + ': Family has the same Spouses and marriage date as ' + *uniqueResults[0], sep= ", ")
+			# csv_file.write("\n")
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
@@ -894,7 +938,5 @@ else:
 parser(gedFile)
 display()
 # Sprint1()
-Sprint2()
-print(individual)
-print("\n")
-print(families)
+# Sprint2()
+Sprint3()
