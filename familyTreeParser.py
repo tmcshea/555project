@@ -683,6 +683,36 @@ def noSiblingMarriage(famID):
 				return False
 	return True
 
+# US21: Checks for correct gender for role in family
+# Input: famID
+def checkGenderRole(famID):
+	if famID not in families:
+		return False
+	family = families[famID]
+	husbandID = family['HUSB'][0]
+	wifeID = family['WIFE'][0]
+
+	husbandGender = individual[husbandID]['SEX']
+	wifeGender = individual[wifeID]['SEX']
+
+	if husbandGender == 'F' or wifeGender == 'M':
+		return False
+	return True
+
+# US22: All individuals and families have a unique ID
+# Input: none
+def uniqueIDs():
+	for a in individual:
+		for b in individual:
+			if a['INDI'] == b['INDI']:
+				return False
+	for a in families:
+		for b in families:
+			if a['FAMS'] == b['FAMS']:
+				return False
+
+	return True
+
 def Sprint1():
 	for id in individual:
 		# US01 error check
