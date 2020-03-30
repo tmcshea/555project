@@ -1023,24 +1023,27 @@ def Sprint2():
 		if (not marriageAfter14(famID)[1]):
 			print("ERROR: FAMILY: US10:  " + famID +
 				": Father married before 14" )
-
+		# us 12 test
 		if (parentsNotTooOld(famID) == False):
 			print('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
 			csv_file.write('ERROR: FAMILY: US12: ' + famID + ': A parent gave birth to a kid while too old')
 			csv_file.write("\n")
+		# us 13 test
 		if (siblingSpacing(famID) == False):
 			print("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
 			csv_file.write("ERROR: FAMILY: US13: " + famID + ": Children are born too close together")
 			csv_file.write("\n")
+		# us 14 test
 		if (siblingSameBirth(famID) == False):
 			print("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
-			csv_file.write("ERROR: FAMILY: US15: " + famID + ": More than 5 siblings have the same birth")
+			csv_file.write("ERROR: FAMILY: US14: " + famID + ": More than 5 siblings have the same birth")
 			csv_file.write("\n")
+		# us 15 test
 		if (less15Siblings(famID) == False):
 			print("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
 			csv_file.write("ERROR: FAMILY: US15: " + famID + ": Family has more than 15 chilren")
 			csv_file.write("\n")
-
+		# us 16 test
 	for id in lastNameBool:
 		if(lastNameBool[id] == False):
 			father = families[individual[id]['FAMC']]['HUSB'][0]
@@ -1072,33 +1075,33 @@ def Sprint3():
 			csv_file.write("\n")
 
 	for famID in families:
+		# us 17 test
 		if(noChildrenMarriage(famID) == False):
 			print('ERROR: FAMILY: US17: ' + famID + ': Child is marriage to parent.')
 			csv_file.write('ERROR: FAMILY: US17: ' + famID + ': Child is marriage to parent.')
 			csv_file.write("\n")
-
+		# us 18 test
 		if(noSiblingMarriage(famID) == False):
 			print('ERROR: FAMILY: US18: ' + famID + ': Siblings are married.')
 			csv_file.write('ERROR: FAMILY: US18: ' + famID + ': Siblings are married.')
 			csv_file.write("\n")
-
 		# US19 - cousins
 		if (noCousinMarraige(famID) == False):
 			print('ERROR: FAMILY: US19: {}: Family has two married first cousins'.format(famID))
 			csv_file.write('ERROR: FAMILY: US19: {}: Family has two married first cousins'.format(famID))
 			csv_file.write('\n')
-
 		# US20 - aunt/uncle and niece/nephew
 		if (noAuntsAndUncles(famID) == False):
 			print('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
 			csv_file.write('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
 			csv_file.write('\n')
-
+		# us 22 test
 		if (not checkGenderRole(famID)):
 			print('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
 			csv_file.write('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
 			csv_file.write('\n')
 		uniqueResults = uniqueFamilySpouse(famID)
+		# us 24 test
 		if (uniqueResults[1]):
 			print('ERROR: FAMILY: US24: ' + famID + ': Family has the same Spouses and marriage date as ', end = "")
 			print(*uniqueResults[0], sep= ", ")
