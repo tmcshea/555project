@@ -1064,7 +1064,7 @@ def Sprint3():
 	for id in individual:
 		uniqueResults = uniqueName(id)
 		if (uniqueResults[1]):
-			print('ERROR: INDIVIDUAL: US23: ' + id + ': Individial has the same name and birthday as ', end = "")
+			print('ERROR: INDIVIDUAL: US23: ' + id + ': Individial has the same name and birthday as ', end="")
 			print(*uniqueResults[0], sep= ", ")
 			csv_file.write('ERROR: INDIVIDUAL: US23: ' + id + ': Individial has the same name and birthday as ')
 			for items in uniqueResults:
@@ -1095,10 +1095,10 @@ def Sprint3():
 			print('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
 			csv_file.write('ERROR: FAMILY: US20: {}: Family has an aunt or uncle married to a niece or nephew'.format(famID))
 			csv_file.write('\n')
-		# us 22 test
+		# us 21 test
 		if (not checkGenderRole(famID)):
-			print('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
-			csv_file.write('ERROR: ANOMALY: US22: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
+			print('ERROR: ANOMALY: US21: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
+			csv_file.write('ERROR: ANOMALY: US21: {}: Family has a gender anomaly for the husband or wife position'.format(famID))
 			csv_file.write('\n')
 		uniqueResults = uniqueFamilySpouse(famID)
 		# us 24 test
