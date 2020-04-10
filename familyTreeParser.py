@@ -851,7 +851,8 @@ def getPersonAge(id):
 	if (id not in individual):
 		return False
 	birth = parseDate(individual[id]['BIRT'])
-	return age(birth)
+	personAge = age(birth)
+	return personAge
 
 # helper for sorting childrens ages
 def getSecond(elem):
@@ -1142,7 +1143,24 @@ def Sprint3():
 			csv_file.write("\n")
 
 def Sprint4():
-	print(getPersonAge('@I25@'))
+	print()
+	print("Sprint Four Errors: ")
+	csv_file.write("\n")
+	csv_file.write("Sprint FourErrors: ")
+	csv_file.write("\n")
+	for id in individual:
+		print(id)
+		# US27 test
+		if (getPersonAge(id) < 0):
+			print('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
+			csv_file.write('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
+			csv_file.write('\n')
+	for fam in families:
+		# US28 test
+		if ('CHIL' in families[fam]):
+			if (len(orderChildren(fam)) != len(families[fam]['CHIL'])):
+				print('ERROR: FAMILY: US28: {}: Family ')
+		
 	
 
 # added a default file for testing purposes

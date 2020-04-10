@@ -51,3 +51,15 @@ ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
 @F13@,14 JUL 0209,NA,['@I27@'],['Jimmy /Tricks/'],['@I29@'],['Destiny /Tricks/'],NA
 @F14@,14 JUL 0209,NA,['@I33@'],['Brother /Gural/'],['@I22@'],['Twelve /Vicky/'],['@I34@']
 
+
+Sprint FourErrors: 
+ERROR: INDIVIDUAL: US27: @I1@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I3@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I4@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I5@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I6@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I21@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I29@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I31@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I32@: Person has an age under zero
+ERROR: INDIVIDUAL: US27: @I35@: Person has an age under zero
