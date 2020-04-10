@@ -1,39 +1,39 @@
 ID,Name,Gender,Birthday,Age,Alive,Death,Child,Spouse
-@I1@,Jim /Vicky/,M,15 OCT 2020,0,False,14 DEC 2020,@F4@,"['@F1@', '@F2@', '@F3@']"
-@I2@,Sam /Vicky/,F,18 NOV 1500,520,True,NA,NA,['@F2@']
-@I3@,Destiny /Tricks/,F,27 OCT 2020,0,True,NA,@F6@,['@F13@']
-@I4@,Henry /Vicky/,M,21 NOV 2020,0,True,NA,@F2@,NA
-@I5@,Happy /Tricks/,F,25 NOV 2020,0,True,NA,@F1@,NA
-@I6@,Drake /Vicky/,M,2 AUG 2021,-1,True,NA,@F2@,NA
-@I7@,Jimmy /Tricks/,M,11 JUN 1192,828,False,8 MAR 1991,NA,"['@F6@', '@F13@']"
-@I8@,Jasper /Buckets/,M,8 JUL 1980,40,False,12 JUL 2000,NA,"['@F4@', '@F7@']"
-@I9@,Heather /Vicky/,F,8 AUG 1981,39,False,12 JUL 2000,NA,['@F4@']
-@I10@,Jess /Buckets/,F,23 SEP 1979,41,True,NA,@F8@,['@F7@']
+@I1@,Jim /Vicky/,M,15 OCT 2020,-1,False,14 DEC 2020,@F4@,"['@F1@', '@F2@', '@F3@']"
+@I2@,Sam /Vicky/,F,18 NOV 1500,519,True,NA,NA,['@F2@']
+@I3@,Destiny /Tricks/,F,27 OCT 2020,-1,True,NA,@F6@,['@F13@']
+@I4@,Henry /Vicky/,M,21 NOV 2020,-1,True,NA,@F2@,NA
+@I5@,Happy /Tricks/,F,25 NOV 2020,-1,True,NA,@F1@,NA
+@I6@,Drake /Vicky/,M,2 AUG 2021,-2,True,NA,@F2@,NA
+@I7@,Jimmy /Tricks/,M,11 JUN 1192,827,False,8 MAR 1991,NA,"['@F6@', '@F13@']"
+@I8@,Jasper /Buckets/,M,8 JUL 1980,39,False,12 JUL 2000,NA,"['@F4@', '@F7@']"
+@I9@,Heather /Vicky/,F,8 AUG 1981,38,False,12 JUL 2000,NA,['@F4@']
+@I10@,Jess /Buckets/,F,23 SEP 1979,40,True,NA,@F8@,['@F7@']
 @I11@,One /Vicky/,M,14 FEB 1998,22,True,NA,@F7@,NA
 @I12@,Two /Vicky/,F,14 FEB 1998,22,True,NA,@F7@,NA
 @I13@,Three /Vicky/,M,14 FEB 1998,22,True,NA,@F7@,NA
 @I14@,Four /Vicky/,F,14 FEB 1998,22,True,NA,@F7@,"['@F3@', '@F9@']"
 @I15@,Five /Vicky/,M,14 FEB 1998,22,True,NA,@F7@,['@F10@']
 @I16@,Six /Vicky/,F,14 FEB 1998,22,True,NA,@F7@,NA
-@I17@,Seven /Vicky/,F,7 AUG 0199,1821,True,NA,@F7@,NA
-@I18@,Eight /Vicky/,M,16 OCT 2001,19,True,NA,@F7@,['@F11@']
-@I19@,Nine /Vicky/,M,15 AUG 1970,50,True,NA,@F7@,NA
-@I20@,Ten /Vicky/,M,10 AUG 2001,19,True,NA,@F7@,NA
-@I21@,Eleven /Vicky/,F,9 SEP 3000,-980,True,NA,@F7@,NA
-@I22@,Twelve /Vicky/,F,9 AUG 2011,9,True,NA,@F7@,['@F12@']
-@I23@,Unlucky /Vicky/,M,13 MAY 0202,1818,True,NA,@F7@,NA
-@I24@,Fourteen /Vicky/,F,12 JUN 2014,6,True,NA,@F7@,NA
-@I25@,Fifteen /Vicky/,M,10 JUN 1987,33,True,NA,@F7@,NA
-@I26@,Sixteen /Vicky/,M,10 JUN 0203,1817,True,NA,@F7@,['@F10@']
-@I27@,Jimmy /Tricks/,M,11 JUN 1192,828,False,8 MAR 1991,NA,"['@F6@', '@F13@']"
-@I28@,Vicky /Tricks/,F,11 AUG 1300,720,True,NA,NA,['@F6@']
-@I29@,Destiny /Tricks/,F,27 OCT 2022,-2,True,NA,NA,['@F13@']
-@I30@,Rich /Vicky/,M,19 AUG 1980,40,True,NA,@F10@,['@F12@']
-@I31@,Rick /Gural/,M,12 SEP 3020,-1000,True,NA,NA,['@F8@']
-@I32@,Gem /Gural/,F,8 DEC 4005,-1985,True,NA,NA,['@F8@']
-@I33@,Brother /Gural/,M,17 SEP 1998,22,True,NA,@F8@,"['@F9@', '@F14@']"
-@I34@,Brad /Gural/,M,15 OCT 2010,10,True,NA,@F14@,['@F11@']
-@I35@,Jim /Vicky/,M,15 OCT 2020,0,False,14 DEC 2020,@F4@,"['@F1@', '@F2@', '@F3@']"
+@I17@,Seven /Vicky/,F,7 AUG 0199,1820,True,NA,@F7@,NA
+@I18@,Eight /Vicky/,M,16 OCT 2001,18,True,NA,@F7@,['@F11@']
+@I19@,Nine /Vicky/,M,15 AUG 1970,49,True,NA,@F7@,NA
+@I20@,Ten /Vicky/,M,10 AUG 2001,18,True,NA,@F7@,NA
+@I21@,Eleven /Vicky/,F,9 SEP 3000,-981,True,NA,@F7@,NA
+@I22@,Twelve /Vicky/,F,9 AUG 2011,8,True,NA,@F7@,['@F12@']
+@I23@,Unlucky /Vicky/,M,13 MAY 0202,1817,True,NA,@F7@,NA
+@I24@,Fourteen /Vicky/,F,12 JUN 2014,5,True,NA,@F7@,NA
+@I25@,Fifteen /Vicky/,M,10 JUN 1987,32,True,NA,@F7@,NA
+@I26@,Sixteen /Vicky/,M,10 JUN 0203,1816,True,NA,@F7@,['@F10@']
+@I27@,Jimmy /Tricks/,M,11 JUN 1192,827,False,8 MAR 1991,NA,"['@F6@', '@F13@']"
+@I28@,Vicky /Tricks/,F,11 AUG 1300,719,True,NA,NA,['@F6@']
+@I29@,Destiny /Tricks/,F,27 OCT 2022,-3,True,NA,NA,['@F13@']
+@I30@,Rich /Vicky/,M,19 AUG 1980,39,True,NA,@F10@,['@F12@']
+@I31@,Rick /Gural/,M,12 SEP 3020,-1001,True,NA,NA,['@F8@']
+@I32@,Gem /Gural/,F,8 DEC 4005,-1986,True,NA,NA,['@F8@']
+@I33@,Brother /Gural/,M,17 SEP 1998,21,True,NA,@F8@,"['@F9@', '@F14@']"
+@I34@,Brad /Gural/,M,15 OCT 2010,9,True,NA,@F14@,['@F11@']
+@I35@,Jim /Vicky/,M,15 OCT 2020,-1,False,14 DEC 2020,@F4@,"['@F1@', '@F2@', '@F3@']"
 
 ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
 @F1@,23 OCT 2020,1 NOV 2020,['@I1@'],['Jim /Vicky/'],['@I3@'],['Destiny /Tricks/'],['@I5@']

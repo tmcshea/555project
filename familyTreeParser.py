@@ -111,7 +111,7 @@ def display():
 			spouse = "NA"
 		else:
 			spouse = individual[ids]["FAMS"]
-		age = 2020 - int(individual[ids]["BIRT"][-4:])
+		age = getPersonAge(ids)
 		x.add_row([ids, individual[ids]["NAME"], individual[ids]["SEX"],
 				  individual[ids]["BIRT"], age, alive, death, child, spouse])
 		writer.writerow([ids, individual[ids]["NAME"], individual[ids]["SEX"],
@@ -169,7 +169,6 @@ def parseDate(date):
 
 # function that finds a person's age (does not stop at death)
 # input: date passed through parseDate
-
 
 def age(date):
 	today = datetime.today()
@@ -846,8 +845,13 @@ def uniqueFamilySpouse(famid):
 		return [[], False]
 
 # US27: returns persons age
-# This is built on a function we already had that 
-# def getPersonAge
+# age function created earlier is based off a date and this is off of a person
+# Input: id from individual dictionary
+def getPersonAge(id):
+	if (id not in individual):
+		return False
+	birth = parseDate(individual[id]['BIRT'])
+	return age(birth)
 
 # helper for sorting childrens ages
 def getSecond(elem):
@@ -863,7 +867,7 @@ def orderChildren(fam):
 		return children
 	listOfChildrenWithAges = []
 	for child in children:
-		childAge = age(parseDate(individual[child]['BIRT']))
+		childAge = getPersonAge(child)
 		listOfChildrenWithAges.append([child,childAge])
 	listOfChildrenWithAges.sort(key=getSecond, reverse=True)
 	finalSorted = []
@@ -1138,8 +1142,8 @@ def Sprint3():
 			csv_file.write("\n")
 
 def Sprint4():
-	for fam in families:
-		orderChildren(fam)
+	print(getPersonAge('@I25@'))
+	
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
