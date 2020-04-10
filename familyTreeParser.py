@@ -149,11 +149,10 @@ def display():
 			wifName = []
 			for name in WIFE:
 				wifName.append(individual[name]["NAME"])
-
 		if("CHIL" not in families[ids]):
 			child = "NA"
 		else:
-			child = families[ids]["CHIL"]
+			child = orderChildren(ids)
 		y.add_row([ids, married, divorced, HUSB, husName, WIFE, wifName, child])
 		writer.writerow([ids, married, divorced, HUSB,
 						husName, WIFE, wifName, child])
@@ -846,7 +845,32 @@ def uniqueFamilySpouse(famid):
 	else:
 		return [[], False]
 
+# US27: returns persons age
+# This is built on a function we already had that 
+# def getPersonAge
 
+# helper for sorting childrens ages
+def getSecond(elem):
+	return elem[1]
+
+# US28: puts all the children of a family in order from oldest to youngest
+# Input: id from family dictionary 
+def orderChildren(fam):
+	if('CHIL' not in families[fam]):
+		return
+	children = families[fam]['CHIL']
+	if (len(children) == 1):
+		return children
+	listOfChildrenWithAges = []
+	for child in children:
+		childAge = age(parseDate(individual[child]['BIRT']))
+		listOfChildrenWithAges.append([child,childAge])
+	listOfChildrenWithAges.sort(key=getSecond, reverse=True)
+	finalSorted = []
+	for elem in listOfChildrenWithAges:
+		finalSorted.append(elem[0])
+	return finalSorted
+	
 
 def Sprint1():
 	print("Sprint One Errors: ")
@@ -1113,6 +1137,9 @@ def Sprint3():
 					csv_file.write(str(items))
 			csv_file.write("\n")
 
+def Sprint4():
+	for fam in families:
+		orderChildren(fam)
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
@@ -1123,8 +1150,7 @@ else:
 
 parser(gedFile)
 display()
-Sprint1()
-Sprint2()
-Sprint3()
-
-# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
+# Sprint1()
+# Sprint2()
+# Sprint3()
+Sprint4()
