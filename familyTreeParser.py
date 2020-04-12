@@ -111,7 +111,7 @@ def display():
 			spouse = "NA"
 		else:
 			spouse = individual[ids]["FAMS"]
-		age = 2020 - int(individual[ids]["BIRT"][-4:])
+		age = getPersonAge(ids)
 		x.add_row([ids, individual[ids]["NAME"], individual[ids]["SEX"],
 				  individual[ids]["BIRT"], age, alive, death, child, spouse])
 		writer.writerow([ids, individual[ids]["NAME"], individual[ids]["SEX"],
@@ -149,11 +149,10 @@ def display():
 			wifName = []
 			for name in WIFE:
 				wifName.append(individual[name]["NAME"])
-
 		if("CHIL" not in families[ids]):
 			child = "NA"
 		else:
-			child = families[ids]["CHIL"]
+			child = orderChildren(ids)
 		y.add_row([ids, married, divorced, HUSB, husName, WIFE, wifName, child])
 		writer.writerow([ids, married, divorced, HUSB,
 						husName, WIFE, wifName, child])
@@ -170,7 +169,6 @@ def parseDate(date):
 
 # function that finds a person's age (does not stop at death)
 # input: date passed through parseDate
-
 
 def age(date):
 	today = datetime.today()
@@ -869,13 +867,127 @@ def uniqueFirstName(famID):
 	return True
 
 # US26: corresponding entries
-# Input: individual id
+# Input: individual id and family id
 # Output: boolean
 def correspondingEntries_individual(id):
 	if (id not in individual):
-			return False
-	
+		return False
+	person = individual[id]
+	if person.has_key('FAMS'):
+		for fam in person['FAMS']:
+			family = families[fam]
+			if id not in family['HUSB'] or id not in family['WIFE']:
+				return False
+	if person.has_key('FAMC'):
+		for fam in person['FAMC']:
+			family = families[fam]
+			if id not in family['CHIL']:
+				return False
+	return True
+
+def correspondingEntries_family(famID):
+	if (famID not in families):
+		return False
+	family = families[famID]
+	if family.has_key('HUSB'):
+		for person in family['HUSB']:
+			if person not in individual:
+				return False
+	if family.has_key('WIFE'):
+		for person in family['WIFE']:
+			if person not in individual:
+				return False
+	if family.has_key('CHIL'):
+		for person in family['CHIL']:
+			if person not in individual:
+				return False
+	else:
+		return True
+
+# US27: returns persons age
+# age function created earlier is based off a date and this is off of a person
+# Input: id from individual dictionary
+def getPersonAge(id):
+	if (id not in individual):
+		return False
+	birth = parseDate(individual[id]['BIRT'])
+	personAge = age(birth)
+	return personAge
+
+# helper for sorting childrens ages
+def getSecond(elem):
+	return elem[1]
+
+# US28: puts all the children of a family in order from oldest to youngest
+# Input: id from family dictionary
+def orderChildren(fam):
+	if('CHIL' not in families[fam]):
+		return
+	children = families[fam]['CHIL']
+	if (len(children) == 1):
+		return children
+	listOfChildrenWithAges = []
+	for child in children:
+		childAge = getPersonAge(child)
+		listOfChildrenWithAges.append([child,childAge])
+	listOfChildrenWithAges.sort(key=getSecond, reverse=True)
+	finalSorted = []
+	for elem in listOfChildrenWithAges:
+		finalSorted.append(elem[0])
+	return finalSorted
+
+# US29: List all deceased family members
+# Input: id tag from individual dictionary
+def listDeceased(id):
+	if(id not in individual):
+		return False
+	if("DEAT" in individual[id]):
+		return True
 	return False
+
+# US30: List all living married individuals
+# Input: id tag from indvidual dictionary
+def listLivingMarried(id):
+	if(id not in individual):
+		return False
+	if("DEAT" not in individual[id]):
+		if("FAMS" in individual[id]):
+			return True
+	return False
+
+# US31: List all single indivial over the age of 30.
+# Input: id tag from individual Dictionary
+def livingSingles(id):
+	if(id not in individual):
+		return False
+
+	if("FAMS" not in individual[id]):
+		birth = parseDate(individual[id]['BIRT'])
+		if (age(birth) >= 30):
+			return True
+
+	return False
+
+def multipleBirth(famid):
+	if(famid not in families):
+		return [False, []]
+
+	childBirth = []
+	results = []
+	if('CHIL' in families[famid]):
+		children = families[famid]['CHIL']
+		for kids in children:
+			birth = parseDate(individual[kids]['BIRT'])
+			childBirth.append(birth)
+
+		for i in range(len(childBirth)):
+			for j in range(len(childBirth)):
+				if(i != j and childBirth[i] == childBirth[j] and children[i] not in results):
+					results.append(children[i])
+		if results:
+			return[True, results]
+
+	return [False, []]
 
 def Sprint1():
 	print("Sprint One Errors: ")
@@ -1142,6 +1254,83 @@ def Sprint3():
 					csv_file.write(str(items))
 			csv_file.write("\n")
 
+def Sprint4():
+	print()
+	# US28
+	print('List of all families with kids, with kids in order of oldest to youngest')
+	csv_file.write("\n")
+	csv_file.write("List of all families with kids, with kids in order of oldest to youngest")
+	csv_file.write("\n")
+	for fam in families:
+		if 'CHIL' in families[fam]:
+			orderedKids = orderChildren(fam)
+			print('Family: {} | Kids: '.format(fam), end='')
+			csv_file.write('Family: {} | Kids: '.format(fam))
+			for kid in orderedKids:
+				if (kid == orderedKids[-1]):
+					print(individual[kid]['NAME'])
+					csv_file.write(individual[kid]['NAME'])
+					csv_file.write('\n')
+				else:
+					print(individual[kid]['NAME'], end=', ')
+					csv_file.write('{}, '.format(individual[kid]['NAME']))
+	print("Sprint Four Errors: ")
+	csv_file.write("\n")
+	csv_file.write("Sprint FourErrors: ")
+	csv_file.write("\n")
+	for id in individual:
+		# US27 test
+		if (getPersonAge(id) < 0):
+			print('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
+			csv_file.write('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
+			csv_file.write('\n')
+
+	print("List of Deceased individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Deceased individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(listDeceased(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+
+	print("List of Married living individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Married living individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(listLivingMarried(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+
+	print("List of Single individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Single individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(livingSingles(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+	print("List of Families with multiple birth on the same day: ")
+	csv_file.write("\n")
+	csv_file.write("List of Families with multiple birth on the same day: ")
+	csv_file.write("\n")
+	for famid in families:
+		if(multipleBirth(famid)[0]):
+			print(famid + ": ", end = "")
+			print(*multipleBirth(famid)[1], sep= ", ")
+			for items in multipleBirth(famid)[1]:
+				if(items != multipleBirth(famid)[1][len(multipleBirth(famid)[1]) - 1]):
+					csv_file.write(str(items) + ', ')
+				else:
+					csv_file.write(str(items))
+			csv_file.write("\n")
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
@@ -1151,8 +1340,17 @@ else:
 	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
+<<<<<<< HEAD
 # display()
 
 # Sprint1()
 # Sprint2()
 # Sprint3()
+=======
+display()
+Sprint1()
+Sprint2()
+Sprint3()
+Sprint4()
+# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
+>>>>>>> master

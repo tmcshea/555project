@@ -143,68 +143,85 @@ class Testing(unittest.TestCase):
 # 		self.assertEqual(familyTreeParser.maleLastName('@I1@'), True)
 
 # sprint3
-# US17: checks for parent + children marriage
-	def test_us17_noChildrenMarriage(self):
-		self.assertEqual(familyTreeParser.noChildrenMarriage('badid'), True)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@F6@'), False)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@F7@'), True)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@I7@'), True)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@F10@'), True)
+# # US17: checks for parent + children marriage
+# 	def test_us17_noChildrenMarriage(self):
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('badid'), True)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@F6@'), False)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@F7@'), True)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@I7@'), True)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@F10@'), True)
 
-# US18: checks for sibling marriage
-	def test_us18_noSiblingMarriage(self):
-		self.assertEqual(familyTreeParser.noSiblingMarriage('badid'), True)
-		self.assertEqual(familyTreeParser.noSiblingMarriage('@F7@'), False)
-		self.assertEqual(familyTreeParser.noSiblingMarriage('@F8@'), False)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@I7@'), True)
-		self.assertEqual(familyTreeParser.noChildrenMarriage('@F10@'), True)
+# # US18: checks for sibling marriage
+# 	def test_us18_noSiblingMarriage(self):
+# 		self.assertEqual(familyTreeParser.noSiblingMarriage('badid'), True)
+# 		self.assertEqual(familyTreeParser.noSiblingMarriage('@F7@'), False)
+# 		self.assertEqual(familyTreeParser.noSiblingMarriage('@F8@'), False)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@I7@'), True)
+# 		self.assertEqual(familyTreeParser.noChildrenMarriage('@F10@'), True)
 
-# US19: checks for cousin marraige
-	def test_us19_noCousinMarraige(self):
-		self.assertEqual(familyTreeParser.noCousinMarraige('random'), True)
-		self.assertEqual(familyTreeParser.noCousinMarraige(''), True)
-		self.assertEqual(familyTreeParser.noCousinMarraige('@F6@'), True)
-		self.assertEqual(familyTreeParser.noCousinMarraige('@F11@'), False)
-		self.assertEqual(familyTreeParser.noCousinMarraige('@I3@'), True)
+# # US19: checks for cousin marraige
+# 	def test_us19_noCousinMarraige(self):
+# 		self.assertEqual(familyTreeParser.noCousinMarraige('random'), True)
+# 		self.assertEqual(familyTreeParser.noCousinMarraige(''), True)
+# 		self.assertEqual(familyTreeParser.noCousinMarraige('@F6@'), True)
+# 		self.assertEqual(familyTreeParser.noCousinMarraige('@F11@'), False)
+# 		self.assertEqual(familyTreeParser.noCousinMarraige('@I3@'), True)
 
-# US20: check for marraige between uncle/aunt and neice/nephew
-	def test_us20_noAuntUncle(self):
-		self.assertEqual(familyTreeParser.noAuntsAndUncles('random'), False)
-		self.assertEqual(familyTreeParser.noAuntsAndUncles(''), False)
-		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F9@'), False)
-		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F4@'), True)
-		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F12@'), False)
-		self.assertEqual(familyTreeParser.noAuntsAndUncles('@I1@'), False)
+# # US20: check for marraige between uncle/aunt and neice/nephew
+# 	def test_us20_noAuntUncle(self):
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles('random'), False)
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles(''), False)
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F9@'), False)
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F4@'), True)
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles('@F12@'), False)
+# 		self.assertEqual(familyTreeParser.noAuntsAndUncles('@I1@'), False)
 
-# US21: checks for sibling marriage
-	def test_us21_checkGenderRole(self):
-		self.assertEqual(familyTreeParser.checkGenderRole(''), False)
-		self.assertEqual(familyTreeParser.checkGenderRole('random'), False)
-		self.assertEqual(familyTreeParser.checkGenderRole('@F10@'), False)
-		self.assertEqual(familyTreeParser.checkGenderRole('@F11@'), False)
-		self.assertEqual(familyTreeParser.checkGenderRole('@F12@'), True)
-		self.assertEqual(familyTreeParser.checkGenderRole('@F1@'), True)
+# # US21: checks for sibling marriage
+# 	def test_us21_checkGenderRole(self):
+# 		self.assertEqual(familyTreeParser.checkGenderRole(''), False)
+# 		self.assertEqual(familyTreeParser.checkGenderRole('random'), False)
+# 		self.assertEqual(familyTreeParser.checkGenderRole('@F10@'), False)
+# 		self.assertEqual(familyTreeParser.checkGenderRole('@F11@'), False)
+# 		self.assertEqual(familyTreeParser.checkGenderRole('@F12@'), True)
+# 		self.assertEqual(familyTreeParser.checkGenderRole('@F1@'), True)
 
-# US22: check to make sure every ID is unique
-	def test_us22_uniqueIDs(self):
-		self.assertEqual(familyTreeParser.uniqueIDs(), True)
+# # US22: check to make sure every ID is unique
+# 	def test_us22_uniqueIDs(self):
+# 		self.assertEqual(familyTreeParser.uniqueIDs(), True)
 
-# US23: check for unique name
-	def test_us23_uniqueName(self):
-		self.assertEqual(familyTreeParser.uniqueName('random'), [[],False])
-		self.assertEqual(familyTreeParser.uniqueName(''), [[],False])
-		self.assertEqual(familyTreeParser.uniqueName('@I1@'), [['@I35@'],True])
-		self.assertEqual(familyTreeParser.uniqueName('@I7@'), [['@I27@'],True])
-		self.assertEqual(familyTreeParser.uniqueName('@I3@'), [[],False])
-		self.assertEqual(familyTreeParser.uniqueName('@F3@'), [[],False])
+# # US23: check for unique name
+# 	def test_us23_uniqueName(self):
+# 		self.assertEqual(familyTreeParser.uniqueName('random'), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueName(''), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueName('@I1@'), [['@I35@'],True])
+# 		self.assertEqual(familyTreeParser.uniqueName('@I7@'), [['@I27@'],True])
+# 		self.assertEqual(familyTreeParser.uniqueName('@I3@'), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueName('@F3@'), [[],False])
 
-	# US24: check for unique family spouse
-	def test_us24_uniqueFamilySpouse(self):
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse('random'), [[],False])
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse(''), [[],False])
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F12@'), [['@F14@'],True])
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F14@'), [['@F12@'],True])
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@I3@'), [[],False])
-		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F3@'), [[],False])
+# 	# US24: check for unique family spouse
+# 	def test_us24_uniqueFamilySpouse(self):
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('random'), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse(''), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F12@'), [['@F14@'],True])
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F14@'), [['@F12@'],True])
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@I3@'), [[],False])
+# 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F3@'), [[],False])
+
+# sprint4
+	# US27: check for getting the persons age
+	def test_us27_getPersonName(self):
+		self.assertEqual(familyTreeParser.getPersonAge('random'), False)
+		self.assertEqual(familyTreeParser.getPersonAge(''), False)
+		self.assertEqual(familyTreeParser.getPersonAge('@I7@'), 827)
+		self.assertEqual(familyTreeParser.getPersonAge('@I4@'), -1)
+		self.assertEqual(familyTreeParser.getPersonAge('@I16@'), 22)
+	
+	#US28: check for order children
+	def test_us28_orderChildren(self):
+		self.assertEqual(familyTreeParser.orderChildren('@F6@'), ['@I3@'])
+		self.assertEqual(familyTreeParser.orderChildren('@F8@'), ['@I10@', '@I33@'])
+		self.assertEqual(familyTreeParser.orderChildren('@F7@'), ['@I17@', '@I23@', '@I26@', '@I19@', '@I25@', '@I11@', '@I12@', '@I13@', '@I14@', '@I15@', '@I16@', '@I18@', '@I20@', '@I22@', '@I24@', '@I21@'])
+
+
 if __name__ == "__main__":
 	unittest.main()
