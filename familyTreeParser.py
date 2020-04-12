@@ -852,6 +852,9 @@ def uniqueFirstName(famID):
 	# base case: invalid ID
 	if (famID not in families):
 		return False
+	# base case: if children actually exist
+	if (families[famID].get('CHIL') == None):
+		return True
 	# init vars
 	children = families[famID]['CHIL']
 	listOfChildren = []
@@ -873,31 +876,30 @@ def correspondingEntries_individual(id):
 	if (id not in individual):
 		return False
 	person = individual[id]
-	if person.has_key('FAMS'):
+	if person.get('FAMS') != None:
 		for fam in person['FAMS']:
 			family = families[fam]
-			if id not in family['HUSB'] or id not in family['WIFE']:
+			if (id not in family['HUSB']) and (id not in family['WIFE']):
 				return False
-	if person.has_key('FAMC'):
-		for fam in person['FAMC']:
-			family = families[fam]
-			if id not in family['CHIL']:
-				return False
+	if person.get('FAMC') != None:
+		family = families[person['FAMC']]
+		if id not in family['CHIL']:
+			return False
 	return True
 
 def correspondingEntries_family(famID):
 	if (famID not in families):
 		return False
 	family = families[famID]
-	if family.has_key('HUSB'):
+	if family.get('HUSB') != None:
 		for person in family['HUSB']:
 			if person not in individual:
 				return False
-	if family.has_key('WIFE'):
+	if family.get('WIFE') != None:
 		for person in family['WIFE']:
 			if person not in individual:
 				return False
-	if family.has_key('CHIL'):
+	if family.get('CHIL') != None:
 		for person in family['CHIL']:
 			if person not in individual:
 				return False
@@ -968,6 +970,8 @@ def livingSingles(id):
 
 	return False
 
+# US32: List all multiple births
+# Input: family id
 def multipleBirth(famid):
 	if(famid not in families):
 		return [False, []]
@@ -1276,14 +1280,65 @@ def Sprint4():
 					csv_file.write('{}, '.format(individual[kid]['NAME']))
 	print("Sprint Four Errors: ")
 	csv_file.write("\n")
-	csv_file.write("Sprint FourErrors: ")
+	csv_file.write("Sprint Four Errors: ")
 	csv_file.write("\n")
+
+	for id in families:
+		# US25 test
+		if (uniqueFirstName(id) == False):
+			print('ERROR: FAMILY: US25: {}: Duplicate child entry'.format(id))
+			csv_file.write('ERROR: FAMILY: US25: {}: Duplicate child entry\n'.format(id))
+
+	for id in individual:
+		# US26 test
+		if (correspondingEntries_individual(id) == False):
+			print('ERROR: INDIVIDUAL: US26: {}: Inconsistent individual entries'.format(id))
+			csv_file.write('ERROR: INDIVIDUAL: US26: {}: Inconsistent individual entries\n'.format(id))
+
+	for id in families:
+		# US26 test #2
+		if (correspondingEntries_family(id) == False):
+			print('ERROR: FAMILY: US26: {}: Inconsistent family entries'.format(id))
+			csv_file.write('ERROR: FAMILY: US26: {}: Inconsistent family entries\n'.format(id))
+
 	for id in individual:
 		# US27 test
 		if (getPersonAge(id) < 0):
 			print('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
 			csv_file.write('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
 			csv_file.write('\n')
+
+	print("US25: List of Families with Duplicate Children:")
+	csv_file.write("\n")
+	csv_file.write("US25: List of Families with Duplicate Children: ")
+	csv_file.write("\n")
+	for fam in families:
+		if (not uniqueFirstName(fam)):
+			print(fam)
+			csv_file.write(fam)
+			csv_file.write("\n")
+
+	print("US26: List of Individuals with Inconsistent Entries: ")
+	csv_file.write("\n")
+	csv_file.write("US26: List of Individuals with Inconsistent Entries: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(not correspondingEntries_individual(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+
+	print("US26: List of Families with Inconsistent Entries: ")
+	csv_file.write("\n")
+	csv_file.write("US26: List of Families with Inconsistent Entries: ")
+	csv_file.write("\n")
+	for id in families:
+		if(not correspondingEntries_individual(id)):
+			print(id)
+			csv_file.write(id)
+			csv_file.write("\n")
+	print()
 
 	print("List of Deceased individuals: ")
 	csv_file.write("\n")
@@ -1340,17 +1395,8 @@ else:
 	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
-<<<<<<< HEAD
-# display()
-
-# Sprint1()
-# Sprint2()
-# Sprint3()
-=======
 display()
 Sprint1()
 Sprint2()
 Sprint3()
 Sprint4()
-# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
->>>>>>> master
