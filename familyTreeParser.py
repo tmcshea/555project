@@ -1159,7 +1159,9 @@ def Sprint4():
 		# US28 test
 		if ('CHIL' in families[fam]):
 			if (len(orderChildren(fam)) != len(families[fam]['CHIL'])):
-				print('ERROR: FAMILY: US28: {}: Family ')
+				print('ANOMALY: FAMILY: US28: {}: Family order of children displayed children incorrectly'.format(fam))
+				csv_file.write('ANOMALY: FAMILY: US28: {}: Family order of children displayed children incorrectly'.format(fam))
+				csv_file.write('\n')
 		
 	
 
