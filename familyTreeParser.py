@@ -846,7 +846,36 @@ def uniqueFamilySpouse(famid):
 	else:
 		return [[], False]
 
+# US25: unique first names in family
+# Desc: No more than one child with the same name and birth date should appear in a family.
+# Input: family id
+# Output: boolean value
+def uniqueFirstName(famID):
+	# base case: invalid ID
+	if (famID not in families):
+		return False
+	# init vars
+	children = families[famID]['CHIL']
+	listOfChildren = []
+	# iterate through all children into comparable formats
+	for child in children:
+		individualChild = individual[child]
+		dictionaryEntry = {'name': individualChild['NAME'], 'birt': individualChild['BIRT']}
+		listOfChildren.append(dictionaryEntry)
+	# iterate through formatted info
+	for child in listOfChildren:
+		if listOfChildren.count(child) > 1:
+			return False
+	return True
 
+# US26: corresponding entries
+# Input: individual id
+# Output: boolean
+def correspondingEntries_individual(id):
+	if (id not in individual):
+			return False
+	
+	return False
 
 def Sprint1():
 	print("Sprint One Errors: ")
@@ -1122,9 +1151,8 @@ else:
 	# gedFile = 'test_error_family.ged'
 
 parser(gedFile)
-display()
-Sprint1()
-Sprint2()
-Sprint3()
+# display()
 
-# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
+# Sprint1()
+# Sprint2()
+# Sprint3()
