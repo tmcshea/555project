@@ -877,6 +877,40 @@ def orderChildren(fam):
 	return finalSorted
 	
 
+# US31: List all single indivial over the age of 30.
+# Input: id tag from individual Dictionary
+def livingSingles(id):
+	if(id not in individual):
+		return False
+
+	if("FAMS" not in individual[id]):
+		birth = parseDate(individual[id]['BIRT'])
+		if (age(birth) >= 30):
+			return True
+
+	return False
+
+def multipleBirth(famid):
+	if(famid not in families):
+		return [False, []]
+
+	childBirth = []
+	results = []
+	if('CHIL' in families[famid]):
+		children = families[famid]['CHIL']
+		for kids in children:
+			birth = parseDate(individual[kids]['BIRT'])
+			childBirth.append(birth)
+
+		for i in range(len(childBirth)):
+			for j in range(len(childBirth)):
+				if(i != j and childBirth[i] == childBirth[j] and children[i] not in results):
+					results.append(children[i])
+		if results:
+			return[True, results]
+
+	return [False, []]
+
 def Sprint1():
 	print("Sprint One Errors: ")
 	csv_file.write("Sprint One Errors: ")
@@ -1174,6 +1208,30 @@ def Sprint4():
 			csv_file.write('\n')
 		
 	
+	print("List of Single individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Single individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(livingSingles(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+	print("List of Families with multiple birth on the same day: ")
+	csv_file.write("\n")
+	csv_file.write("List of Families with multiple birth on the same day: ")
+	csv_file.write("\n")
+	for famid in families:
+		if(multipleBirth(famid)[0]):
+			print(famid + ": ", end = "")
+			print(*multipleBirth(famid)[1], sep= ", ")
+			for items in multipleBirth(famid)[1]:
+				if(items != multipleBirth(famid)[1][len(multipleBirth(famid)[1]) - 1]):
+					csv_file.write(str(items) + ', ')
+				else:
+					csv_file.write(str(items))
+			csv_file.write("\n")
 
 # added a default file for testing purposes
 if(len(sys.argv) >= 2):
@@ -1184,7 +1242,8 @@ else:
 
 parser(gedFile)
 display()
-# Sprint1()
-# Sprint2()
-# Sprint3()
+Sprint1()
+Sprint2()
+Sprint3()
 Sprint4()
+# Aaron: added I8 (Cammy Victor) and F18 (James + Cammy) for US17 testing to test_bigamy_and_parents_age.ged
