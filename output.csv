@@ -52,6 +52,16 @@ ID,Married,Divorced,Husband ID,Husband Name,Wife ID,Wife Name,Children
 @F14@,14 JUL 0209,NA,['@I33@'],['Brother /Gural/'],['@I22@'],['Twelve /Vicky/'],['@I34@']
 
 
+List of all families with kids, with kids in order of oldest to youngest
+Family: @F1@ | Kids: Happy /Tricks/
+Family: @F2@ | Kids: Henry /Vicky/, Drake /Vicky/
+Family: @F4@ | Kids: Jim /Vicky/
+Family: @F6@ | Kids: Destiny /Tricks/
+Family: @F7@ | Kids: Seven /Vicky/, Unlucky /Vicky/, Sixteen /Vicky/, Nine /Vicky/, Fifteen /Vicky/, One /Vicky/, Two /Vicky/, Three /Vicky/, Four /Vicky/, Five /Vicky/, Six /Vicky/, Eight /Vicky/, Ten /Vicky/, Twelve /Vicky/, Fourteen /Vicky/, Eleven /Vicky/
+Family: @F8@ | Kids: Jess /Buckets/, Brother /Gural/
+Family: @F10@ | Kids: Rich /Vicky/
+Family: @F14@ | Kids: Brad /Gural/
+
 Sprint FourErrors: 
 ERROR: INDIVIDUAL: US27: @I1@: Person has an age under zero
 ERROR: INDIVIDUAL: US27: @I3@: Person has an age under zero

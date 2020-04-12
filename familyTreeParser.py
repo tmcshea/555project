@@ -1144,24 +1144,34 @@ def Sprint3():
 
 def Sprint4():
 	print()
+	# US28
+	print('List of all families with kids, with kids in order of oldest to youngest')
+	csv_file.write("\n")
+	csv_file.write("List of all families with kids, with kids in order of oldest to youngest")
+	csv_file.write("\n")
+	for fam in families:
+		if 'CHIL' in families[fam]:
+			orderedKids = orderChildren(fam)
+			print('Family: {} | Kids: '.format(fam), end='')
+			csv_file.write('Family: {} | Kids: '.format(fam))
+			for kid in orderedKids:
+				if (kid == orderedKids[-1]):
+					print(individual[kid]['NAME'])
+					csv_file.write(individual[kid]['NAME'])
+					csv_file.write('\n')
+				else:
+					print(individual[kid]['NAME'], end=', ')
+					csv_file.write('{}, '.format(individual[kid]['NAME']))
 	print("Sprint Four Errors: ")
 	csv_file.write("\n")
 	csv_file.write("Sprint FourErrors: ")
 	csv_file.write("\n")
 	for id in individual:
-		print(id)
 		# US27 test
 		if (getPersonAge(id) < 0):
 			print('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
 			csv_file.write('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
 			csv_file.write('\n')
-	for fam in families:
-		# US28 test
-		if ('CHIL' in families[fam]):
-			if (len(orderChildren(fam)) != len(families[fam]['CHIL'])):
-				print('ANOMALY: FAMILY: US28: {}: Family order of children displayed children incorrectly'.format(fam))
-				csv_file.write('ANOMALY: FAMILY: US28: {}: Family order of children displayed children incorrectly'.format(fam))
-				csv_file.write('\n')
 		
 	
 
