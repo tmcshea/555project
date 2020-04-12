@@ -876,6 +876,24 @@ def orderChildren(fam):
 		finalSorted.append(elem[0])
 	return finalSorted
 	
+# US29: List all deceased family members
+# Input: id tag from individual dictionary
+def listDeceased(id):
+	if(id not in individual):
+		return False
+	if("DEAT" in individual[id]):
+		return True
+	return False
+
+# US30: List all living married individuals
+# Input: id tag from indvidual dictionary
+def listLivingMarried(id):
+	if(id not in individual):
+		return False
+	if("DEAT" not in individual[id]):
+		if("FAMS" in individual[id]):
+			return True
+	return False
 
 # US31: List all single indivial over the age of 30.
 # Input: id tag from individual Dictionary
@@ -1207,7 +1225,28 @@ def Sprint4():
 			csv_file.write('ERROR: INDIVIDUAL: US27: {}: Person has an age under zero'.format(id))
 			csv_file.write('\n')
 		
-	
+	print("List of Deceased individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Deceased individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(listDeceased(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+
+	print("List of Married living individuals: ")
+	csv_file.write("\n")
+	csv_file.write("List of Married living individuals: ")
+	csv_file.write("\n")
+	for id in individual:
+		if(listLivingMarried(id)):
+			print(individual[id]['NAME'])
+			csv_file.write(individual[id]['NAME'])
+			csv_file.write("\n")
+	print()
+
 	print("List of Single individuals: ")
 	csv_file.write("\n")
 	csv_file.write("List of Single individuals: ")
