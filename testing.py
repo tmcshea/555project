@@ -208,6 +208,24 @@ class Testing(unittest.TestCase):
 # 		self.assertEqual(familyTreeParser.uniqueFamilySpouse('@F3@'), [[],False])
 
 # sprint4
+	# US25: check for duplicate children first name entries
+	def test_us25_uniqueFirstName(self):
+		self.assertEqual(familyTreeParser.uniqueFirstName('dsaf'), False)
+		self.assertEqual(familyTreeParser.uniqueFirstName(''), False)
+		self.assertEqual(familyTreeParser.uniqueFirstName('@F1@'), True)
+		self.assertEqual(familyTreeParser.uniqueFirstName('@F7@'), True)
+
+	# US26: check for consistent records between individuals and families
+	def test_us26_correspondingEntries_individual(self):
+		self.assertEqual(familyTreeParser.correspondingEntries_individual('51fds'), False)
+		self.assertEqual(familyTreeParser.correspondingEntries_individual(''), False)
+		self.assertEqual(familyTreeParser.correspondingEntries_individual('@I1@'), True)
+
+	def test_us26_correspondingEntries_family(self):
+		self.assertEqual(familyTreeParser.correspondingEntries_family('51fds'), False)
+		self.assertEqual(familyTreeParser.correspondingEntries_family(''), False)
+		self.assertEqual(familyTreeParser.correspondingEntries_family('@F3@'), True)
+
 	# US27: check for getting the persons age
 	def test_us27_getPersonName(self):
 		self.assertEqual(familyTreeParser.getPersonAge('random'), False)
@@ -215,7 +233,7 @@ class Testing(unittest.TestCase):
 		self.assertEqual(familyTreeParser.getPersonAge('@I7@'), 827)
 		self.assertEqual(familyTreeParser.getPersonAge('@I4@'), -1)
 		self.assertEqual(familyTreeParser.getPersonAge('@I16@'), 22)
-	
+
 	#US28: check for order children
 	def test_us28_orderChildren(self):
 		self.assertEqual(familyTreeParser.orderChildren('@F6@'), ['@I3@'])
